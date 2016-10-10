@@ -1,9 +1,12 @@
-# Blog
+# blog
 
 blog在线预览地址：http://139.224.74.133
 
-前端是react+redux+react-router
-后端是node+express+mongoDB提供的API
+ 前端: react+redux+react-router
+ 
+ 后端: node+express+mongoDB提供的API
+ 
+ 前后端完全分离
 
 ### 开始 
 1.安装 nodejs(>=4) 
