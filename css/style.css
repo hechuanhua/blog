@@ -1,0 +1,24 @@
+@charset "UTF-8";
+/**
+ * 
+ * @authors Your Name (you@example.org)
+ * @date    2016-09-05 09:56:14
+ * @version $Id$
+ */
+*{margin:0;padding: 0}
+body{font-size: 14px;font-family: "微软雅黑";line-height: 1.5;}
+ul,li{list-style: none;}
+a{color: #333;text-decoration: none;}
+.nav { height: 40px; line-height: 40px; background: #45a7ff; }
+.nav li { float: left; width: 100px; text-align: center;  }
+.nav li a { display: block; color: #fff; }
+.nav li a.active{background: #2c73cd;}
+a.title {
+    display: block;
+    font-size: 18px;
+    color: #45a7ff;
+}
+
+.describe {
+    margin: 10px 0;
+}
