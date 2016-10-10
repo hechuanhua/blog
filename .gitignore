@@ -1,3 +1,4 @@
 *.no
 /node_modules/
 /.idea/
+.gitignore
