@@ -380,7 +380,9 @@ var data={"phone": 111,"passWord":111111,"phoneCaptcha":2122,"nickName":"sdfsdf"
 post("http://wtest.api.wttai.com/member/register",data,function(_data){
   console.log("_data====>",_data)
 })*/
-
+app.get('/',function(req,res){
+  res.end("开发模式下请输入 localhost:7070")
+})
 app.get('/getUserInfo', function (req, res) {
   if(req.session.user){
     var info={name:req.session.user.name}

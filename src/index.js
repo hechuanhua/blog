@@ -1,7 +1,7 @@
 /**
  * 
  * @authors hechuanhua (you@example.org)
- * @date    2016-06-05 00:58:23
+ * @date    2016-09-05 00:58:23
  * @version $Id$
  */
 import React,{Component} from 'react'
@@ -110,7 +110,7 @@ class App extends Component{
   }
 }
 const Foot=()=>(
-  <div className="Footer">联系方式：447503467@qq.com</div>
+  <div className="Footer">源码：https://github.com/hechuanhua/blog</div>
 )
 
 const rootRoute = {
