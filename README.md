@@ -10,9 +10,13 @@ blog在线预览地址：http://139.224.74.133
 
 ### 开始 
 1.安装 nodejs(>=4) 
-# 2.启动mongodb
+2.启动mongodb
 
 ### 运行
+    git clone https://github.com/hechuanhua/blog.git
+    npm install
+    npm install webpack -g
+    
     开发环境===>
     npm run node
     npm run dev
