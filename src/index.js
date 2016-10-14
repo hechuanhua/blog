@@ -77,7 +77,7 @@ const Page404 = {
   path: '*',
   getComponent(nextState, cb) {
     require.ensure([], (require) => {
-      return cb(null, require('./js/components/Page404'))
+      return cb(null, require('./js/components/page404'))
     }) 
   }
 }
