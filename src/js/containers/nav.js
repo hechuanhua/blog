@@ -5,8 +5,8 @@ import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../actions/index'
 import { Link, IndexLink} from 'react-router'
-import NoLoginTop from '../Components/noLoginTop'
-import LoginIngTop from '../Components/loginIngTop'
+import NoLoginTop from '../components/noLoginTop'
+import LoginIngTop from '../components/loginIngTop'
 import {hashHistory } from 'react-router'
 
 

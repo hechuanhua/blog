@@ -1,4 +1,6 @@
 *.no
 /node_modules/
+/dist/
+/build/
 /.idea/
 .gitignore
