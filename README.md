@@ -25,5 +25,5 @@ blog在线预览地址：http://139.224.74.133
 
     生产环境===>
     npm run node
-    npm run dist
+    npm run dist(linux下是 npm run dist_linux)
     浏览器输入 localhost:8080
