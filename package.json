@@ -7,8 +7,8 @@
     "node": "nodemon server.js",
     "dev": "webpack-dev-server",
     "build": "webpack",
-    "dist": "set NODE_ENV=production&&webpack -p --progress --colors",//windows
-    "dist_linux": "export NODE_ENV=production&&webpack -p --progress --colors"//linux
+    "dist": "set NODE_ENV=production&&webpack -p --progress --colors",
+    "dist_linux": "export NODE_ENV=production&&webpack -p --progress --colors"
   },
   "author": "hechuanhua",
   "license": "MIT",

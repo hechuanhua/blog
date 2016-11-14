@@ -1,6 +1,6 @@
 # blog
 
-blog在线预览地址：http://139.224.74.133
+blog在线预览地址：http://112.74.76.57
 
  前端: react+redux+react-router
  
