@@ -1,6 +1,6 @@
 # blog
 
-blog在线预览地址：http://www.hechuanhua.cn:8080
+blog在线预览地址：http://www.hechuanhua.cn
 
  前端: react+redux+react-router
  
