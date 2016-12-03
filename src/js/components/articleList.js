@@ -50,7 +50,7 @@ export class PageLi extends Component {
             < ul className = "pageList" > { pageTmp } < /ul> < /div >
     }
 }
-
+ 
 export const ArticleList = ({ articleList }) => {
     let articleTmp = []
     if (articleList && articleList.length) {
