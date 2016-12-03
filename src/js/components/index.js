@@ -35,8 +35,8 @@ export class Index extends Component{
   render(){
     let data=this.props.index;
     return <div className="index">
-    <ArticleList articleList={data.data} articleAction={this.props.actions.ajaxData} type="index"/>
-    <PageLi pageList={data.page} current={1}  ajaxData={this.props.actions.ajaxData} type="index"/>
+    <ArticleList articleList={data.data}/>
+    <PageLi pageList={data.page}  ajaxData={this.props.actions.ajaxData} type="index"/>
     </div>
   }
 }
