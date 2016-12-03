@@ -58,7 +58,7 @@ export const ArticleList = ({ articleList }) => {
         for (let i = 0; i < data.length; i++) {
             articleTmp.push( < ArticleItem key = { i } data = { data[i] } />)
         }
-    }
+    } 
     return <div > < ul className = "articleList" > { articleTmp.length ? articleTmp : "无搜索结果" } < /ul></div >
 }
 
