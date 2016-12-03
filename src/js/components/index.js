@@ -4,7 +4,8 @@ import { render } from 'react-dom'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../actions/index'
-import ArticleList from './articleList'
+import {ArticleList,PageLi} from './articleList'
+
 
 export class Index extends Component{
   constructor(props) {
@@ -33,7 +34,10 @@ export class Index extends Component{
   }*/
   render(){
     let data=this.props.index;
-    return <ArticleList articleList={data} articleAction={this.props.actions.ajaxData} type="index"/>
+    return <div className="index">
+    <ArticleList articleList={data.data} articleAction={this.props.actions.ajaxData} type="index"/>
+    <PageLi pageList={data.page} current={1}  ajaxData={this.props.actions.ajaxData} type="index"/>
+    </div>
   }
 }
 

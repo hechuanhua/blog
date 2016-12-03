@@ -97,5 +97,5 @@ if (prod) {
         ]);
     module.exports.devtool = 'source-map';
 }else{
-  //module.exports.devtool = 'source-map';
+  module.exports.devtool = 'source-map';
 }
