@@ -15,6 +15,11 @@ export class Index extends Component{
     console.log("Index==>componentWillMount111")
     this.props.actions.ajaxData("index")
   }
+  
+  componentWillReceiveProps(){
+    console.log("componentWillReceiveProps333,收到新的参数")
+
+  }
  /* componentDidMount(){
     console.log("componentDidMount222")
   }
@@ -35,7 +40,7 @@ export class Index extends Component{
   render(){
     let data=this.props.index;
     return <div className="index">
-    <ArticleList articleList={data.data}/>
+    <ArticleList articleList={data.data} type="index" />
     <PageLi pageList={data.page}  ajaxData={this.props.actions.ajaxData} type="index"/>
     </div>
   }

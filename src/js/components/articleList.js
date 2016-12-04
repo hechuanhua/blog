@@ -14,12 +14,13 @@ export class PageLi extends Component {
     constructor(props) {
         super(props)
         this.type = this.props.type
-        this.keyword = this.props.keyword
+        this.keyword = this.props.location.query.keyword
     }
     swtichPage(i) {
         if (this.type == "index") {
             this.props.ajaxData(this.type, i)
         } else if (this.type == "search") {
+            console.log(this.props.location.query.keyword)
             this.props.ajaxData(this.keyword, i)
         }
     }
@@ -38,10 +39,11 @@ export class PageLi extends Component {
 
         }
         if (this.type == "search") { 
+            let keyword = this.keyword
             if(pageNum>1){
                 for (let i = 1; i <= pageNum; i++) {
                     pageTmp.push( < li key = { i } onClick = {() => { this.swtichPage(i) } } > 
-                        < Link to = {{ pathname: "search", query: { page: i, keyword: this.keyword } }} activeClassName = "active" > { i } < /Link>
+                        < Link to = {{ pathname: "search", query: { page: i, keyword: keyword } }} activeClassName = "active" > { i } < /Link>
                         </li > )
                 }
             }
@@ -51,14 +53,25 @@ export class PageLi extends Component {
     }
 }
  
-export const ArticleList = ({ articleList }) => {
-    let articleTmp = []
-    if (articleList && articleList.length) {
-        let data = articleList
-        for (let i = 0; i < data.length; i++) {
-            articleTmp.push( < ArticleItem key = { i } data = { data[i] } />)
-        }
-    } 
-    return <div > < ul className = "articleList" > { articleTmp.length ? articleTmp : "无搜索结果" } < /ul></div >
+export class ArticleList extends Component{
+    componentWillReceiveProps(){
+        console.log("componentWillReceiveProps333,收到新的参数",this.props)
+        // if (this.props.type == "index") {
+        //     this.props.ajaxData(this.props.type, i)
+        // } else if (this.props.type == "search") {
+        //     this.props.ajaxData(this.props.keyword, i)
+        // }
+    }
+    render(){
+        let articleTmp = [],
+            articleList=this.props.articleList
+        if (articleList) {
+            let data = articleList
+            for (let i = 0; i < data.length; i++) {
+                articleTmp.push( < ArticleItem key = { i } data = { data[i] } />)
+            }
+        } 
+        return <div > < ul className = "articleList" > { articleTmp.length ? articleTmp : "无搜索结果" } < /ul></div >
+    }
 }
 
