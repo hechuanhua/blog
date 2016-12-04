@@ -14,12 +14,6 @@ import * as actions from './js/actions/index'
 
 import stores from './js/reducers/index'
 import Index from './js/components/index'
-// import Publish from './js/components/publish'
-// import About from './js/components/about'
-// import Details from './js/components/details'
-// import Search from './js/components/search'
-//import Page404 from './js/components/page404'
-
 import MobBox from './js/containers/mobBox'
 import Nav from './js/containers/nav'
 import TipsBox from './js/containers/tipsBox'

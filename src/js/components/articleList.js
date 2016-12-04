@@ -127,7 +127,7 @@ export class ArticleList extends Component{
                 articleTmp.push( < ArticleItem key = { i } data = { data[i] } />)
             }
         } 
-        return <div > < ul className = "articleList" > { articleTmp.length ? articleTmp : "无搜索结果" } < /ul></div >
+        return <div > < ul className = "articleList" > { articleTmp.length ? articleTmp : "暂无搜索结果" } < /ul></div >
     }
 }
 
