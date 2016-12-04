@@ -8,19 +8,14 @@ import {ArticleList,PageLi} from './articleList'
 
 
 export class Index extends Component{
-  constructor(props) {
+  /* constructor(props) {
     super(props)
   }
   componentWillMount(){
     console.log("Index==>componentWillMount111")
-    this.props.actions.ajaxData("index")
+    his.props.actions.ajaxData("index")
   }
-  
-  componentWillReceiveProps(){
-    console.log("componentWillReceiveProps333,收到新的参数")
-
-  }
- /* componentDidMount(){
+ componentDidMount(){
     console.log("componentDidMount222")
   }
   componentWillReceiveProps(){
@@ -40,8 +35,8 @@ export class Index extends Component{
   render(){
     let data=this.props.index;
     return <div className="index">
-    <ArticleList articleList={data.data} type="index" />
-    <PageLi pageList={data.page}  ajaxData={this.props.actions.ajaxData} type="index"/>
+    <ArticleList articleList={data.data} type="index" ajaxData={this.props.actions.ajaxData} query={this.props.query} />
+    <PageLi pageList={data.page}  ajaxData={this.props.actions.ajaxData} type="index" query={this.props.query} actions = {this.props.actions}/>
     </div>
   }
 }

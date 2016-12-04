@@ -185,7 +185,12 @@ Upload.getTitle=function(title,callback){
     })
   })
 }
-/*搜索*/
+/**
+ * [Search description]
+ * @param {[type]}   keywords [搜索关键字]
+ * @param {Function} callback [description]
+ * return 返回搜索结果和统计条数以及一次查询几条
+ */
 function Search(keywords,callback){
 
   var keyword=keywords.keyword,limit={},page=keywords.page||1
@@ -203,7 +208,6 @@ function Search(keywords,callback){
       collection.count(query,function(err,count){
         collection.find(query,limit).toArray(function(err,doc){
             mongoDb.close()
-            console.log("doc====>",doc)
             var page={}
             page["count"]=count
             page["limitNum"]=num

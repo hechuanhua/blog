@@ -6,28 +6,11 @@ import * as actions from '../actions/index'
 import { ArticleList,PageLi } from './articleList'
 
 export class SearchComponent extends Component {
-    constructor(props) {
-        super(props)
-    }
-    componentWillMount() {
-        let keyword = this.props.location.query["keyword"]
-        if (!keyword) {
-            return }
-        //const path = "/search?keyword="+keyword
-        //hashHistory.push(path)
-        this.props.actions.searchSubmit(keyword)
-            // this.props.router.push({
-            //    pathname: '/page',
-            //    query: {
-            //      qsparam: keyword
-            //    }
-            //  })
-    }
     render() {
         let data = this.props.search;
         return <div className = "search">
-            <ArticleList articleList = { data.data } type = "search" /> 
-            <PageLi pageList = { data.page } ajaxData = { this.props.actions.ajaxData } type = "search" location = { this.props.location } />
+            <ArticleList articleList = { data.data } ajaxData = { this.props.actions.searchSubmit } type = "search" query = { this.props.location.query } /> 
+            <PageLi pageList = { data.page } ajaxData = { this.props.actions.searchSubmit } type = "search" query = { this.props.location.query } actions = {this.props.actions} />
             </div>
     }
 }

@@ -11,7 +11,7 @@ module.exports = {
     output: {
         path: path.resolve(__dirname, prod ? "./dist" : "./build"), //静态资源会再这目录下
         filename: prod ? "js/[name].[hash].min.js" : "js/[name].js",
-        chunkFilename: 'js/[name].[hash].chunk.js',
+        chunkFilename: prod ? "js/[name].[hash].chunk.js" : "js/[name].js",
         publicPath: prod ? "" : "" //html里面的引用路径会变成这个
     },
     resolve: {

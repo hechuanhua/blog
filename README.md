@@ -27,3 +27,7 @@ blog在线预览地址：http://www.hechuanhua.cn
     npm run node
     npm run dist(linux下是 npm run dist_linux)
     浏览器输入 localhost:8080
+
+#2016-12-4
+    修复页码显示错乱问题
+    优化webpack开发环境下打包流程

@@ -25,7 +25,11 @@ a{color: #333;text-decoration: none;outline: none;}
     li a { display: block; color: #fff; }
     li a.active{background: #2c73cd;}  
 }
-.Footer { height: 80px;/*  position: absolute; bottom: 0; left: 0;  */background: #45a7ff; width: 100%; color: #fff; text-align: center; line-height: 80px; }
+.Footer { height: 80px;/*  position: absolute; bottom: 0; left: 0;  */background: #45a7ff; width: 100%; color: #fff; text-align: center; line-height: 80px; 
+    a{color:#fff;
+        &:hover{text-decoration: underline;}
+    }
+}
 .container{margin:10px auto;overflow:hidden;}
 .articleList{
     .title { display: block; font-size: 18px; color: #45a7ff; }
@@ -66,18 +70,22 @@ a{color: #333;text-decoration: none;outline: none;}
     .btn { width: 150px; height: 35px; text-align: center; margin: 0 auto; line-height: 35px; background: #45a7ff; color: #fff; cursor: pointer; margin-top: 40px; }
 }
 .tipsBox{
+    .tipsBg{position: fixed;width: 100%;height: 100%;top: 0;left: 0;bottom: 0;right: 0;background: transparent;}
     .main{ width: 400px; text-align: center; position: fixed; top: 50%; margin-top: -20px; left: 50%; margin-left: -200px; z-index: 999999999; color: #fff; 
-        animation-name: bounceIn; animation-duration: .3s;animation-fill-mode: both;
-        span { display: inline-block; padding: 8px 80px; background: rgba(0,0,0,.7);  }
+        animation-name: bounceIn; animation-duration: .3s;animation-fill-mode: both;font-size: 16px;
+        .text { display: inline-block; padding: 10px 80px; background: rgba(0,0,0,.7);  }
     }
 }
 .pageListBox{ text-align: center; min-height: 30px; line-height: 30px; margin-top: 30px; 
-    li { display: inline-block; border: 1px solid #45a7ff; margin: 0 5px; }
-    a { display: block; width: 30px; 
+    li { display: inline-block; border: 1px solid #45a7ff; margin: 0 5px; 
+        input{border: none;width: 40px;text-align: center;font-size: 14px;}
+    }
+    a { display: block; width:30px; cursor:pointer;
         &.active{background:#45a7ff;color:#fff;}
         &:hover{background: #45a7ff;color: #fff;}
         &:active{background: #2c73cd;color: #fff;}
     }
+    .pageBtn{width:60px;}
 }
 .formItem { margin-top: 10px; line-height: 35px; 
     .name { float: left; font-size: 16px; }

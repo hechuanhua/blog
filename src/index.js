@@ -102,7 +102,7 @@ class App extends Component{
                 <li><Link to="/ReactForm" activeClassName="active">DIY表单</Link></li>
           </ul>
         </div>
-        <div className="container content">{this.props.children || <Index/>}</div>
+        <div className="container content">{this.props.children || <Index query={ this.props.location.query } />}</div>
         <MobBox />
         <Foot/>
         <TipsBox/>
@@ -110,7 +110,7 @@ class App extends Component{
   }
 }
 const Foot=()=>(
-  <div className="Footer">源码：https://github.com/hechuanhua/blog</div>
+  <div className="Footer">源码：<a target="_blank" href="https://github.com/hechuanhua/blog">https://github.com/hechuanhua/blog</a></div>
 )
 
 const rootRoute = {
