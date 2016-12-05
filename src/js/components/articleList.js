@@ -16,15 +16,36 @@ export class PageLi extends Component {
         super(props)
         this._alert=this.props.actions._alert
     }
+    // componentWillMount(){
+    //     console.log("Index==>componentWillMount111")
+    //     this.props.actions.ajaxData("index")
+    // }
+    // componentDidMount(){
+    //     console.log("componentDidMount222")
+    // }
+    // componentWillReceiveProps(){
+    //     console.log("componentWillReceiveProps333,收到新的参数")
+
+    // }
+    // shouldComponentUpdate(nextProps,nextState){
+    //     console.log("shouldComponentUpdate444，是否需要重新渲染",this.props.index,nextProps.index,nextState)
+    //     return true
+    // }
+    // componentWillUpdate(){
+    //     console.log("componentWillUpdate555")
+    // }
+    // componentDidUpdate(){
+    //     console.log("componentDidUpdate666")
+    // }
     swtichPage(i,type) {
         //this.props.query.page=i;
         if (this.props.type == "index") {
             this.props.ajaxData(this.props.type, i)
-                this.input.value = ""
-                hashHistory.push({
-                    pathname: '/',
-                    query: {page:i}
-                })
+            this.input.value = ""
+            hashHistory.push({
+                pathname: '/',
+                query: {page:i}
+            })
             
         } else if (this.props.type == "search") {
             this.props.ajaxData(this.props.query.keyword, i)
@@ -40,7 +61,7 @@ export class PageLi extends Component {
         let pageTmp = [],
             pageList = this.props.pageList,
             len = pageList && Math.ceil(pageList.count / pageList.limitNum), //页码最大条数
-            pageCurrent = this.props.query.page, //当前处于第几页
+            pageCurrent = this.props.query.page||1, //当前处于第几页
             maxPage = 6,//页码最多展示几页
             edgePage = maxPage%2?Math.floor(maxPage/2):maxPage/2
         if (pageCurrent <= maxPage - edgePage) {

@@ -20,7 +20,7 @@ export class DetailsComponent extends Component{
     this.message
   }
   componentWillMount(){
-    console.log("componentWillMount",this.props)
+    console.log("componentWillMount",this.props,actions)
     this.props.actions.ajaxData("details",this.props.params)
   }
   componentDidUpdate(){
@@ -44,7 +44,7 @@ export class DetailsComponent extends Component{
   }
   render(){
     let data=this.props.details;
-    let img=data.upload?("<img src=http://139.224.74.133:8080/"+data.upload+"></img>"):""
+    let img=data.upload?("<img src="+actions.requestAPI+data.upload+"></img>"):""
     let messageItemTmp=[]
     if(data.comments){
       for(let len=data.comments.length,i=len-1;i>=0;i--){
