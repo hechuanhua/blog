@@ -20,7 +20,7 @@ export class DetailsComponent extends Component{
     this.message
   }
   componentWillMount(){
-    console.log("componentWillMount",this.props,actions)
+    //console.log("componentWillMount",this.props,actions)
     this.props.actions.ajaxData("details",this.props.params)
   }
   componentDidUpdate(){

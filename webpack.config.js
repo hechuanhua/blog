@@ -69,9 +69,12 @@ if (prod) {
     module.exports.plugins = (module.exports.plugins || [])
         .concat([
             //new CleanPlugin(['dist/js']),
+            //new webpack.optimize.UglifyJsPlugin({
             new webpack.optimize.UglifyJsPlugin({
                 compress: {
-                    warnings: false
+                    warnings: false,
+                    //drop_debugger: true,
+                    drop_console: true
                 }
             }),
             new webpack.optimize.OccurenceOrderPlugin(), //按引用频度来排序 ID，以便达到减少文件大小的效果
@@ -83,7 +86,7 @@ if (prod) {
                 minChunks: Infinity
             }),
         ]);
-    module.exports.devtool = 'source-map';
+    //module.exports.devtool = 'source-map';
 } else {
     module.exports.devtool = 'source-map';
     module.exports.plugins = (module.exports.plugins || [])
