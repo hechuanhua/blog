@@ -97,7 +97,7 @@ app.use(flash());
 //app.use(express.static(__dirname))
 app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 0 }));
 app.all('*', function(req, res, next) {
-    res.header('Access-Control-Allow-Origin', 'localhost');
+    res.header('Access-Control-Allow-Origin', 'http://localhost:7070');
     res.header('Access-Control-Allow-Headers', 'Content-Type=application/json;charset=UTF-8');
     res.header('Access-Control-Allow-Credentials', true) //支持跨域传cookie
         /* res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');*/

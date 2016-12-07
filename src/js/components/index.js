@@ -18,13 +18,13 @@ export class Index extends Component {
     //     console.log("Index==>componentDidMount222")
     // }
     // componentWillReceiveProps() {
-    //     console.log("Index==>componentWillReceiveProps333,收到新的参数")
+    //     console.log("Index==>componentWillReceiveProps333,收到新的参数",this.props)
     //     //this.props.actions.ajaxData("index", this.props.query.page)
     // }
-    // // shouldComponentUpdate(nextProps,nextState){
-    // //   console.log("shouldComponentUpdate444，是否需要重新渲染",this.props.index,nextProps.index,nextState)
-    // //   return true
-    // // }
+    // shouldComponentUpdate(nextProps,nextState){
+    //   console.log("shouldComponentUpdate444，是否需要重新渲染",this.props.index,nextProps.index,this.props,nextProps)
+    //   return true
+    // }
     // componentWillUpdate() {
     //     console.log("Index==>componentWillUpdate555")
     // }
