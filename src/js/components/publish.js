@@ -31,8 +31,8 @@ export class PublishComponent extends Component{
           _alert("只能上传图片")
           return 
         }
-        if(this.file.files[0].size>50*1024){
-          _alert("图片大小不能超过50KB")
+        if(this.file.files[0].size>100*1024){
+          _alert("图片大小不能超过100KB")
           return 
         }
       }

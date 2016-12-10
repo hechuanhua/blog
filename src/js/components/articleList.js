@@ -70,7 +70,9 @@ export class PageLi extends Component {
             pageCurrent = this.props.query.page || 1, //当前处于第几页
             maxPage = 6, //页码最多展示几页
             edgePage = maxPage % 2 ? Math.floor(maxPage / 2) : maxPage / 2
-        
+        if(len<=1){
+            return <div></div>
+        }
         if (pageCurrent <= maxPage - edgePage) {
             if (len <= maxPage) {
                 for (let i = 1; i <= len; i++) {
