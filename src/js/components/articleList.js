@@ -36,26 +36,26 @@ export class PageLi extends Component {
     // componentDidUpdate(){
     //     console.log("componentDidUpdate666")
     // }
-    // swtichPage(i, type) {
-    //     //this.props.query.page=i;
-    //     if (this.props.type == "index") {
-    //         this.props.ajaxData(this.props.type, i)
-    //         this.input.value = ""
-    //         hashHistory.push({
-    //             pathname: '/',
-    //             query: { page: i }
-    //         })
+    swtichPage(i, type) {
+        //this.props.query.page=i;
+        if (this.props.type == "index") {
+            this.props.ajaxData(this.props.type, i)
+            this.input.value = ""
+            hashHistory.push({
+                pathname: '/',
+                query: { page: i }
+            })
 
-    //     } else if (this.props.type == "search") {
-    //         this.props.ajaxData(this.props.query.keyword, i)
-    //         console.log(i, this.props.query.keyword)
-    //         this.input.value = ""
-    //         hashHistory.push({
-    //             pathname: 'search',
-    //             query: { page: i, keyword: this.props.query.keyword }
-    //         })
-    //     }
-    // }
+        } else if (this.props.type == "search") {
+            this.props.ajaxData(this.props.query.keyword, i)
+            console.log(i, this.props.query.keyword)
+            this.input.value = ""
+            hashHistory.push({
+                pathname: 'search',
+                query: { page: i, keyword: this.props.query.keyword }
+            })
+        }
+    }
     params(i){
         if(this.props.type == "index"){
             return { pathname: "/", query: { page: i } }
