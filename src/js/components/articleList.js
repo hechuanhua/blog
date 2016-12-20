@@ -9,7 +9,7 @@ const ArticleItem = ({ data }) => {
         < div className = "title" > { data.title } < /div>  < div className = "describe" > { data.content ? data.content.substr(0, 50) : "" }... < /div >  < div className = "info" > 作者： { data.name }&nbsp;&nbsp;
     阅读量：{ data.pv } &nbsp;&nbsp;
     发布时间：{ data.time.minute }&nbsp;&nbsp;
-    分类: { data.category = 1 ? "web开发" : "node开发"} < /div>  < /a > 
+    分类: { data.category == 1 ? "web开发" : "node开发"} < /div>  < /a > 
     < /li >
 }
 export class PageLi extends Component {
