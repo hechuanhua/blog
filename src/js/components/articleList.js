@@ -6,9 +6,11 @@ import { hashHistory } from 'react-router'
 
 const ArticleItem = ({ data }) => {
     return <li > < a href = { "/#" + data.name + "/" + data.time.day + "/" + data.title } >
-        < div className = "title" > { data.title } < /div>  < div className = "describe" > { data.neirong ? data.neirong.substr(0, 50) : "" }... < /div >  < div className = "info" > 作者： { data.name }
-    阅读量： { data.pv }
-    发布时间： { data.time.minute } < /div>  < /a > < /li >
+        < div className = "title" > { data.title } < /div>  < div className = "describe" > { data.content ? data.content.substr(0, 50) : "" }... < /div >  < div className = "info" > 作者： { data.name }&nbsp;&nbsp;
+    阅读量：{ data.pv } &nbsp;&nbsp;
+    发布时间：{ data.time.minute }&nbsp;&nbsp;
+    分类: { data.category = 1 ? "web开发" : "node开发"} < /div>  < /a > 
+    < /li >
 }
 export class PageLi extends Component {
     constructor(props) {
@@ -142,30 +144,19 @@ export class PageLi extends Component {
 
 export class ArticleList extends Component {
     componentWillMount() {
-        //console.log("Index==>componentWillMount111",this.props)
         if (this.props.type == "index") {
-            if (!this.props.query.page) { /*this.props.query.page = 1*/ }
+            //if (!this.props.query.page) { this.props.query.page = 1 }
             this.props.ajaxData(this.props.type, this.props.query.page)
         } else if (this.props.type == "search") {
             if (!this.props.query.keyword.trim()) {
                 return false }
-            if (!this.props.query.page) { /*this.props.query.page = 1*/ }
+            //if (!this.props.query.page) { this.props.query.page = 1 }
             this.props.ajaxData(this.props.query.keyword, this.props.query.page)
         }
     }
     shouldComponentUpdate(nextProps, nextState) {
-        //console.log("shouldComponentUpdate444，是否需要重新渲染",nextState,this.props,nextProps)
         if (this.props.articleList) {
             var i = location.hash.match(/page=\d+/) ? location.hash.match(/page=\d+/).join('').match(/\d/)[0] : ''
-            // if ((this.props.query.page || i) && this.props.query.page != i) {
-            //     if (this.props.type == "index") {
-            //         this.props.ajaxData(this.props.type, i)
-            //     }else{
-            //         this.props.ajaxData(this.props.query.keyword, i)
-            //     }
-            //     return false
-            // }
-            // return true
             if (this.props.type == "index") {
                 if ((this.props.query.page || i) && this.props.query.page != i) {
                     this.props.ajaxData(this.props.type, i)

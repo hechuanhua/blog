@@ -27,8 +27,6 @@ app.use(webpackDevMiddleware(webpack(WebpackConfig), {
 }))*/
 
 app.set('port', 8080)
-/*app.set('views',path.join(__dirname,'views'))
-app.set('view engine','ejs')*/
 function fsExistsSync(path) {
     try{
         fs.accessSync(path,fs.F_OK);
@@ -100,7 +98,6 @@ app.all('*', function(req, res, next) {
     res.header('Access-Control-Allow-Origin', 'http://localhost:7070');
     res.header('Access-Control-Allow-Headers', 'Content-Type=application/json;charset=UTF-8');
     res.header('Access-Control-Allow-Credentials', true) //支持跨域传cookie
-        /* res.header('Access-Control-Allow-Methods', 'PUT, POST, GET, DELETE, OPTIONS');*/
     next();
 });
 var User = function(user) {
@@ -158,8 +155,9 @@ User.prototype.get = function(name, callback) {
 var Upload = function(uploadlist) {
         this.name = uploadlist.name
         this.title = uploadlist.title
-        this.neirong = uploadlist.neirong
-        this.upload = uploadlist.upload
+        this.content = uploadlist.content
+        this.upload = uploadlist.upload 
+        this.category = uploadlist.category
     }
     /*保存文章内容*/
 Upload.prototype.save = function(callback) {
@@ -175,10 +173,11 @@ Upload.prototype.save = function(callback) {
         var upload = {
             name: this.name,
             title: this.title,
-            neirong: this.neirong,
+            content: this.content,
             upload: this.upload,
             time: time,
-            pv: 0
+            pv: 0,
+            category:this.category
         }
         mongoDb.open(function(err, db) {
             db.collection('upload', function(err, collection) {
@@ -217,7 +216,7 @@ function Search(keywords, callback) {
     var query = {
         $or: [
             { "title": keywordRegExp },
-            { "neirong": keywordRegExp }
+            { "content": keywordRegExp }
         ]
     }
     var limit = {
@@ -310,7 +309,7 @@ function Comment(name, day, title, comments, callback) {
     })
 }
 /*关于网站*/
-function About(neirong, callback) {
+function About(content, callback) {
     mongoDb.open(function(err, db) {
         db.collection('about', function(err, collection) {
             if (err) {
@@ -329,7 +328,7 @@ function About(neirong, callback) {
                 if (oneDoc) {
                     collection.update({
                         "title": "about"
-                    }, { $set: { "neirong": neirong, "time": time } }, function(err, doc) {
+                    }, { $set: { "content": content, "time": time } }, function(err, doc) {
                         if (err) {
                             return callback(err);
                         }
@@ -337,7 +336,7 @@ function About(neirong, callback) {
                         callback(null)
                     })
                 } else {
-                    collection.insert({ "title": "about", "neirong": neirong, "time": time }, {
+                    collection.insert({ "title": "about", "content": content, "time": time }, {
                         safe: true
                     }, function(err) {
                         if (err) {
@@ -460,12 +459,11 @@ app.get('/loginout', function(req, res) {
 //app.get('/publish',checkLogin)
 app.post('/publish', checkLogin)
 app.post('/publish', function(req, res) {
-    //console.log("req====>",req.body,req.file)
     uploadImg(req, res, function(err) {
         if (err) {
             return console.log(err);
         }
-        //console.log("req.file====>",req.file)
+        //console.log("req====>",req.body,req.file)
         Upload.getTitle(req.body.title, function(err, title) {
             if (title) {
                 return res.json({ code: 1002, messgage: "标题已存在" })
@@ -473,8 +471,10 @@ app.post('/publish', function(req, res) {
             var newUpload = new Upload({
                 name: req.session.user.name,
                 title: req.body.title,
-                neirong: req.body.neirong,
+                content: req.body.content,
                 upload: req.file ? "/images/" + req.file.filename : "",
+                category:req.body.category,
+
             })
             newUpload.save(function(err) {
                 return res.json({ code: 1000, messgage: "发布成功" })
@@ -538,7 +538,7 @@ app.post('/about', function(req, res) {
         return res.json({ code: 1001, messgage: "你不是管理员，无法修改" })
     }
     //console.log(req.body)
-    About(req.body.neirong, function(err) {
+    About(req.body.content, function(err) {
         if (err) {
             return res.json({ code: 1001, messgage: err })
         }

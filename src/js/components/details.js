@@ -13,83 +13,83 @@ const MessageItem=({data})=>{
         </div>
 }
 export class DetailsComponent extends Component{
-  constructor(props) {
-    super(props)
-    this.name
-    this.email
-    this.message
-  }
-  componentWillMount(){
-    //console.log("componentWillMount",this.props,actions)
-    this.props.actions.ajaxData("details",this.props.params)
-  }
-  componentDidUpdate(){
-      console.log("componentDidUpdate",this.props)
-  }
-  commentsSubmit(){
-    let _alert=this.props.actions._alert,
-    nameVlue=this.name.value.trim(),
-    messageVlue=this.message.value.trim()
-    if(nameVlue.length<2){
-      _alert("姓名格式不正确")
-      return
+    constructor(props) {
+        super(props)
+        this.nameVlue = window.localStorage['commentInfo']?JSON.parse(window.localStorage['commentInfo']).name:''
+        this.emailValue = window.localStorage['commentInfo']?JSON.parse(window.localStorage['commentInfo']).email:''
     }
-    if(messageVlue.length==0){
-      _alert("留言内容不能为空")
-      return
-    }
-    let data="name="+nameVlue+"&email="+this.email.value+"&message="+messageVlue
-    this.props.actions.commentsSubmit(data,this.props.params)
 
-  }
-  render(){
-    let data=this.props.details;
-    let img=data.upload?("<img src="+actions.requestAPI+data.upload+"></img>"):""
-    let messageItemTmp=[]
-    if(data.comments){
-      for(let len=data.comments.length,i=len-1;i>=0;i--){
-        messageItemTmp.push(<MessageItem key={i} data={data.comments[i]}/>)
-      }
-    }else{
-      messageItemTmp="暂无留言"
+    componentWillMount() {
+        this.props.actions.ajaxData("details", this.props.params)
     }
-    return <div className="articleDetails">
-    <h1>{data.title}</h1>
-    <div className="info">作者：{data.name} 阅读量：{data.pv} 发布时间：{data.time?data.time.minute:""}</div>
-    <div className="main">
-      <div className="coverImg" dangerouslySetInnerHTML={{__html:img}}></div>
-      <div className=""  dangerouslySetInnerHTML={{__html:data.neirong}}>
-      </div>
-    </div>
-    <div className="messageBox">
-        <h2 className="messageEd">留言区</h2>
-        {messageItemTmp}
-        <h2 className="messageIng">发布评论</h2>
-        <div className="formItem">
-            <span className="name">姓名：</span>
-            <div className="inputDiv">
-                <input type="text" name="name" ref={el=>{this.name=el}} placeholder="最少2位数" />
+
+    commentsSubmit() {
+        let _alert = this.props.actions._alert,
+            nameVlue = this.name.value.trim(),
+            messageVlue = this.message.value.trim()
+        if (nameVlue.length < 2) {
+            _alert("姓名格式不正确")
+            return
+        }
+        if (messageVlue.length == 0) {
+            _alert("留言内容不能为空")
+            return
+        }
+        
+        let data = "name=" + nameVlue + "&email=" + this.email.value + "&message=" + messageVlue
+        let json = {"name": this.name.value,"email": this.email.value}
+        window.localStorage['commentInfo'] = JSON.stringify(json)
+        this.props.actions.commentsSubmit(data, this.props.params)
+    }
+
+    render(){
+        let data=this.props.details;
+        let img=data.upload?("<img src="+actions.requestAPI+data.upload+"></img>"):""
+        let messageItemTmp=[]
+        if(data.comments){
+            for(let len=data.comments.length,i=len-1;i>=0;i--){
+                messageItemTmp.push(<MessageItem key={i} data={data.comments[i]}/>)
+            }
+        }else{
+            messageItemTmp="暂无留言"
+        }
+        return <div className="articleDetails">
+        <h1>{data.title}</h1>
+        <div className="info">作者：{data.name}&nbsp;&nbsp;&nbsp;&nbsp;阅读量：{data.pv}&nbsp;&nbsp;&nbsp;&nbsp;发布时间：{data.time?data.time.minute:""}</div>
+        <div className="main">
+            <div className="coverImg" dangerouslySetInnerHTML={{__html:img}}></div>
+            <div className=""  dangerouslySetInnerHTML={{__html:data.content}}>
             </div>
         </div>
-        <div className="formItem">
-            <span className="name">邮箱：</span>
-            <div className="inputDiv">
-                <input type="email" name="email" ref={el=>{this.email=el}}  />
+        <div className="messageBox">
+            <h2 className="messageEd">留言区</h2>
+            {messageItemTmp}
+            <h2 className="messageIng">发布评论</h2>
+            <div className="formItem">
+                <span className="name">姓名：</span>
+                <div className="inputDiv">
+                    <input type="text" name="name" ref={el=>{this.name=el}} placeholder="最少2位数" defaultValue={this.nameVlue}/>
+                </div>
             </div>
-        </div>
-        <div className="formItem">
-            <span className="name">留言：</span>
-            <div className="inputDiv">
-                <textarea name="message" id="" cols="30" rows="5" placeholder="说点什么呢" ref={el=>{this.message=el}} ></textarea>
+            <div className="formItem">
+                <span className="name">邮箱：</span>
+                <div className="inputDiv">
+                    <input type="email" name="email" ref={el=>{this.email=el}} defaultValue={this.emailValue} />
+                </div>
             </div>
+            <div className="formItem">
+                <span className="name">留言：</span>
+                <div className="inputDiv">
+                    <textarea name="message" id="" cols="30" rows="5" placeholder="说点什么呢" ref={el=>{this.message=el}} ></textarea>
+                </div>
+            </div>
+            <div className="btn" onClick={()=>{this.commentsSubmit()}}>提交</div>
         </div>
-        <div className="btn" onClick={()=>{this.commentsSubmit()}}>提交</div>
-    </div>
-      {/*data.map(function(el,i){
-        return <div key={i}>{el.a}</div>
-      })*/}
-    </div>
-  }
+          {/*data.map(function(el,i){
+            return <div key={i}>{el.a}</div>
+          })*/}
+        </div>
+    }
 }
 
 const mapStateToProps=(state)=>{
