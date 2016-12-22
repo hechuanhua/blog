@@ -156,7 +156,7 @@ export class ArticleList extends Component {
     }
     shouldComponentUpdate(nextProps, nextState) {
         if (this.props.articleList) {
-            var i = location.hash.match(/page=\d+/) ? location.hash.match(/page=\d+/).join('').match(/\d/)[0] : ''
+            var i = location.hash.match(/page=\d+/) ? location.hash.match(/page=\d+/).join('').match(/\d+/)[0] : ''
             if (this.props.type == "index") {
                 if ((this.props.query.page || i) && this.props.query.page != i) {
                     this.props.ajaxData(this.props.type, i)
