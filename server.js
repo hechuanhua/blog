@@ -238,24 +238,41 @@ function Search(keywords, callback) {
     })
 }
 /*获取文章列表（每次num条）*/
-Upload.getList = function(page, callback) {
+Upload.getList = function(data, callback) {
         var num = 5
         mongoDb.open(function(err, db) {
             db.collection('upload', function(err, collection) {
-                collection.count({}, function(err, count) {
-                    collection.find({}, {
-                        limit: num,
-                        skip: (page - 1) * num
-                    }).sort({
-                        time: -1
-                    }).toArray(function(err, list) {
-                        mongoDb.close();
-                        var page = {}
-                        page["count"] = count
-                        page["limitNum"] = num
-                        callback(null, list, page)
-                    })
-                });
+                if(data.type){
+                    collection.count({'category':data.type}, function(err, count) {
+                        collection.find({'category':data.type}, {
+                            limit: num,
+                            skip: (data.page - 1) * num
+                        }).sort({
+                            time: -1
+                        }).toArray(function(err, list) {
+                            mongoDb.close();
+                            var page = {}
+                            page["count"] = count
+                            page["limitNum"] = num
+                            callback(null, list, page)
+                        })
+                    });
+                }else{
+                    collection.count({}, function(err, count) {
+                        collection.find({}, {
+                            limit: num,
+                            skip: (data.page - 1) * num
+                        }).sort({
+                            time: -1
+                        }).toArray(function(err, list) {
+                            mongoDb.close();
+                            var page = {}
+                            page["count"] = count
+                            page["limitNum"] = num
+                            callback(null, list, page)
+                        })
+                    });
+                }
             })
 
         })
@@ -485,7 +502,10 @@ app.post('/publish', function(req, res) {
 
 app.get('/newsList', function(req, res) {
     var page = req.query.page || 1
-    Upload.getList(page, function(err, list, page) {
+    var category = req.query.category
+    var type = category?category:''
+    var params = {"type":type,"page":page}
+    Upload.getList(params, function(err, list, page) {
         //res.writeHead(200,{'content-type':'text/json',"Access-Control-Allow-Origin":"http://localhost:7070"})
         var data = {}
         data["data"] = list

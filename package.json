@@ -5,8 +5,8 @@
   "main": "index.js",
   "scripts": {
     "node": "nodemon server.js",
+    "pm2node": "pm2 start server.js",
     "dev": "webpack-dev-server",
-    "build": "webpack",
     "dist": "set NODE_ENV=production&&webpack -p --progress --colors",
     "dist_linux": "export NODE_ENV=production&&webpack -p --progress --colors"
   },

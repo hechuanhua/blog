@@ -5,12 +5,12 @@ import { bindActionCreators } from 'redux'
 import * as actions from '../actions/index'
 import { ArticleList,PageLi } from './articleList'
 
-export class SearchComponent extends Component {
+export class CategoryComponent extends Component {
     render() {
-        let data = this.props.search;
+        let data = this.props.category;
         return <div className = "search">
-            <ArticleList articleList = { data.data } ajaxData = { this.props.actions.ajaxData } type = "search" query = { this.props.location.query } /> 
-            <PageLi pageList = { data.page } ajaxData = { this.props.actions.ajaxData } type = "search" query = { this.props.location.query } actions = {this.props.actions} />
+            <ArticleList articleList = { data.data } ajaxData = { this.props.actions.searchSubmit } type = "search" query = { this.props.location.query } /> 
+            <PageLi pageList = { data.page } ajaxData = { this.props.actions.searchSubmit } type = "search" query = { this.props.location.query } actions = {this.props.actions} />
             </div>
     }
 }
@@ -23,8 +23,8 @@ const mapDispatchToProps = (dispatch) => {
         actions: bindActionCreators(actions, dispatch),
     }
 }
-const Search = connect(
+const Category = connect(
     mapStateToProps, 
     mapDispatchToProps 
-)(SearchComponent)
-module.exports = Search
+)(CategoryComponent)
+module.exports = Category

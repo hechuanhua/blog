@@ -107,29 +107,7 @@ export const requestAPI = "http://localhost:8080/"
 
         }
     }
-    /*搜索文章请求
-    @keyword 搜索关键字
-    @params 如果有代表页码切换
-    */
-    export const searchSubmit = (keyword, params) => {
-        return (dispatch, getState) => {
-            var name = keyword
-            if (params) { //页码查询
-                name = keyword + "&page=" + params
-            }
-            fetch(requestAPI + "search?keyword=" + name, {
-                credentials: 'include'
-            })
-            .then(function(response) {
-                return response.json();
-            }).then(function(data) {
-                console.log(data);
-                return dispatch(SwitchTab("search", data))
-            }).catch(function(e) {
-                console.error(e);
-            });
-        }
-    }
+    
     /*留言
     @data 留言提交的数据
     @params 提交的URL路由
@@ -162,16 +140,46 @@ export const requestAPI = "http://localhost:8080/"
             });
         }
     }
+    /*搜索文章请求
+    @keyword 搜索关键字
+    @params 如果有代表页码切换
+    */
+    export const searchSubmit = (keyword, params) => {
+        return (dispatch, getState) => {
+            var name = keyword
+            if (params) { //页码查询
+                name = keyword + "&page=" + params
+            }
+            fetch(requestAPI + "search?keyword=" + name, {
+                credentials: 'include'
+            })
+            .then(function(response) {
+                return response.json();
+            }).then(function(data) {
+                console.log(data);
+                return dispatch(SwitchTab("search", data))
+            }).catch(function(e) {
+                console.error(e);
+            });
+        }
+    }
     /*文章请求
     @type 列表or文章详情
     @params 如果有代表文章页码切换
     */
     export const ajaxData = (type, params) => {
+        console.log(type,params)
         return (dispatch, getState) => {
             var name = ""
             switch (type) {
                 case "index":
                     if (params) { name = "newsList?page=" + params } else { name = "newsList" };
+                    break;
+                case "category":
+                    if (params) { name = "newsList?category="+params.category+( params.page?"&page=" + params.page:"" )} else { name = "newsList?category" };
+                    break;
+                case "search":
+                    if (params) { name = "search?keyword="+params.keyword+( params.page?"&page=" + params.page:"" )}
                     break;
                 case "details":
                     name = "a/" + params.name + "/" + params.date + "/" + params.title;

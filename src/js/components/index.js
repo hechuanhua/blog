@@ -32,10 +32,13 @@ export class Index extends Component {
     //     console.log("Index==>componentDidUpdate666")
     // }
     render() {
+        var type = location.hash.match(/category=\d+/) ? 'category' : 'index'
+        var categoryType = type == 'category'?location.hash.match(/category=\d+/).join('').match(/\d/)[0]:''
+        //var category = location.hash.match(/category=\d+/) ? location.hash.match(/category=\d+/).join('').match(/\d/)[0] : ''
         let data = this.props.index;
         return <div className = "index" >
-            < ArticleList articleList = { data.data } type = "index" ajaxData = { this.props.actions.ajaxData } query = { this.props.query } /> 
-            < PageLi pageList = { data.page } ajaxData = { this.props.actions.ajaxData } type = "index" query = { this.props.query } actions = { this.props.actions }/> < /div>
+            < ArticleList articleList = { data.data } ajaxData = { this.props.actions.ajaxData } type = { type } query = { this.props.query } /> 
+            < PageLi pageList = { data.page } ajaxData = { this.props.actions.ajaxData } type = { type } query = { this.props.query } actions = { this.props.actions } categoryType = { categoryType }/> < /div>
     }
 }
 
