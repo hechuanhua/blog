@@ -5,7 +5,7 @@ import { Link, IndexLink } from 'react-router'
 import { hashHistory } from 'react-router'
 
 const ArticleItem = ({ data }) => {
-    return <li > < a href = { "/#" + data.name + "/" + data.time.day + "/" + data.title } >
+    return <li > < a href = { "/#" + encodeURI(data.name) + "/" + encodeURI(data.time.day) + "/" + encodeURI(data.title) } >
         < div className = "title" > { data.title } < /div>  < div className = "describe" > { data.content ? data.content.substr(0, 50) : "" }... < /div > 
         < /a > 
          < div className = "info" > 作者： { data.name }&nbsp;&nbsp;

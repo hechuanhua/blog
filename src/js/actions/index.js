@@ -1,5 +1,4 @@
-import 'isomorphic-fetch';
-import Promise from 'es6-promise'
+
 import { hashHistory } from 'react-router'
 export const requestAPI = "http://localhost:8080/"
 
@@ -182,7 +181,7 @@ export const requestAPI = "http://localhost:8080/"
                     if (params) { name = "search?keyword="+params.keyword+( params.page?"&page=" + params.page:"" )}
                     break;
                 case "details":
-                    name = "a/" + params.name + "/" + params.date + "/" + params.title;
+                    name = "a/" + encodeURI(params.name) + "/" + params.date + "/" + encodeURI(params.title);
                     break;
                 case "about":
                     name = "about";

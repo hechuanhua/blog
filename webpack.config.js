@@ -22,7 +22,12 @@ module.exports = {
         loaders: [{
             test: /\.js$/,
             exclude: /node_modules/,
-            loader: 'babel?presets[]=es2015&presets[]=react'
+            //loader: 'babel?presets[]=es2015&presets[]=react'
+            loader: 'babel-loader',
+            query: {
+              presets: [["es2015", { "loose": true }],'react','stage-0'],
+              // plugins: ["transform-es5-property-mutators","transform-jscript","transform-es3-property-literals","transform-es3-member-expression-literals",]
+            }
         }, {
             test: /\.css$/,
             exclude: /node_modules/,
@@ -41,7 +46,12 @@ module.exports = {
             test: /\.woff|\.woff2|\.svg|.eot|\.ttf/,
             exclude: /node_modules/,
             loader: 'url?prefix=font/&limit=10000&name=font/[name].[ext]'
-        }]
+        }],
+        // postLoaders: [{ 
+        //     test: /\.js$/, 
+        //     exclude: /node_modules/,
+        //     loaders: ['es3ify-loader'],
+        // }]
     },
     plugins: [
         new HtmlWebpackPlugin({

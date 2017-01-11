@@ -4,6 +4,14 @@
  * @date    2016-09-05 00:58:23
  * @version $Id$
  */
+//import 'babel-polyfill'
+import 'fetch-ie8';
+import 'es5-shim';
+import 'es5-shim/es5-sham'
+import 'es6-shim';
+// import 'es6-shim/es6-sham'
+// import 'es6-promise'
+
 import React, { Component } from 'react'
 import { render } from 'react-dom'
 import thunkMiddleware from 'redux-thunk'
