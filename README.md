@@ -9,14 +9,14 @@ blog在线预览地址：http://www.hechuanhua.cn
  前后端完全分离
 
 ### 开始 
-1.修改mondoDb.sh路径为自己本机上的mongo路径
+修改mondoDb.sh路径为自己本机上的mongo路径
 
 ### 运行
     git clone https://github.com/hechuanhua/blog.git
     npm install
     npm install webpack -g
-    启动mongo:  ./mongoDb.sh
-    启动node: npm run node
+    启动mongo：  ./mongoDb.sh
+    启动node：  npm run node
 
 ##### 开发环境
     npm run dev
