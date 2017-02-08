@@ -83,12 +83,15 @@ uploadImg = uploadImg.single('upload');
 
 app.use(cookieParser())
 app.use(session({
-    secret: 'myblog', //用来对session数据进行加密的字符串.这个属性值为必须指定的属性。
+    secret: 'myblog', //用来对session数据进行加密的字符串，必须。通过设置的 secret 字符串，来计算 hash 值并放在 cookie 中，使产生的 signedCookie 防篡改
     key: 'blog', //字符串,用于指定用来保存session的cookie名称,默认为coomect.sid.
-    cookie: { maxAge: 1000 * 60 * 60 * 24 * 5 },
-    store: new mongoConnect({ //属性值为一个用来保存session数据的第三方存储对象
-        url: 'mongodb://localhost/blog'
-    })
+    cookie: { maxAge: 1000 * 60 * 60 * 24 * 5 },//默认为(default: { path: '/', httpOnly: true, secure: false, maxAge: null })
+    // genid: 产生一个新的 session_id 时，所使用的函数， 默认使用 `uid2` 这个 npm 包。
+    // rolling: 每个请求都重新设置一个 cookie，默认为 false。
+    // resave: 即使 session 没有被修改，也保存 session 值，默认为 true。
+    // store: new mongoConnect({ // session 的存储方式，默认存放在内存中，也可以使用  1）数据库、2）cookie本身、3）redis 
+    //     url: 'mongodb://localhost/blog'
+    // })
 }))
 app.use(bodyParser.urlencoded({ extended: true }));
 app.use(flash());
@@ -101,37 +104,39 @@ app.all('*', function(req, res, next) {
     next();
 });
 var User = function(user) {
-        this.name = user.userName
-        this.password = user.password
-        this.email = user.email
-    }
-    /*保存用户密码*/
+    this.name = user.userName
+    this.password = user.password
+    this.email = user.email
+}
+
+/*保存用户密码*/
 User.prototype.save = function(callback) {
-        var user = {
-            name: this.name,
-            password: this.password,
-            email: this.email
-        };
-        mongoDb.open(function(err, db) {
+    var user = {
+        name: this.name,
+        password: this.password,
+        email: this.email
+    };
+    mongoDb.open(function(err, db) {
+        if (err) {
+            return callback(err)
+        }
+        db.collection('users', function(err, collection) {
             if (err) {
+                mongoDb.close();
                 return callback(err)
             }
-            db.collection('users', function(err, collection) {
+            collection.insert(user, function(err, user) {
+                mongoDb.close();
                 if (err) {
-                    mongoDb.close();
                     return callback(err)
                 }
-                collection.insert(user, function(err, user) {
-                    mongoDb.close();
-                    if (err) {
-                        return callback(err)
-                    }
-                    callback(null, user)
-                })
+                callback(null, user)
             })
         })
-    }
-    /*获取用户名，防止用户名相同*/
+    })
+}
+
+/*获取用户名，防止用户名相同*/
 User.prototype.get = function(name, callback) {
     mongoDb.open(function(err, db) {
         if (err) {
@@ -152,62 +157,65 @@ User.prototype.get = function(name, callback) {
         })
     })
 }
-var Upload = function(uploadlist) {
-        this.name = uploadlist.name
-        this.title = uploadlist.title
-        this.content = uploadlist.content
-        this.upload = uploadlist.upload 
-        this.category = uploadlist.category
-    }
-    /*保存文章内容*/
-Upload.prototype.save = function(callback) {
-        var date = new Date()
-        var time = {
-            date: date,
-            year: date.getFullYear(),
-            month: date.getFullYear() + "-" + (date.getMonth() + 1),
-            day: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
-            minute: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +
-                date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
-        }
-        var upload = {
-            name: this.name,
-            title: this.title,
-            content: this.content,
-            upload: this.upload,
-            time: time,
-            pv: 0,
-            category:this.category
-        }
-        mongoDb.open(function(err, db) {
-            db.collection('upload', function(err, collection) {
-                collection.insert(upload, function(err, upload) {
-                    mongoDb.close();
-                    callback(null, upload)
-                })
-            })
-        })
-    }
-    /*获取文章标题，防止文章标题一样*/
-Upload.getTitle = function(title, callback) {
-        mongoDb.open(function(err, db) {
-            db.collection('upload', function(err, collection) {
-                collection.findOne({ title: title }, function(err, upload) {
-                    //console.log("getTitle.upload======>:",upload)
-                    mongoDb.close();
-                    callback(null, upload)
-                })
-            })
-        })
-    }
-    /**
-     * [Search description]
-     * @param {[type]}   keywords [搜索关键字]
-     * @param {Function} callback [description]
-     * return 返回搜索结果和统计条数以及一次查询几条
-     */
-function Search(keywords, callback) {
 
+var Upload = function(uploadlist) {
+    this.name = uploadlist.name
+    this.title = uploadlist.title
+    this.content = uploadlist.content
+    this.upload = uploadlist.upload 
+    this.category = uploadlist.category
+}
+
+/*保存文章内容*/
+Upload.prototype.save = function(callback) {
+    var date = new Date()
+    var time = {
+        date: date,
+        year: date.getFullYear(),
+        month: date.getFullYear() + "-" + (date.getMonth() + 1),
+        day: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate(),
+        minute: date.getFullYear() + "-" + (date.getMonth() + 1) + "-" + date.getDate() + " " +
+            date.getHours() + ":" + (date.getMinutes() < 10 ? '0' + date.getMinutes() : date.getMinutes())
+    }
+    var upload = {
+        name: this.name,
+        title: this.title,
+        content: this.content,
+        upload: this.upload,
+        time: time,
+        pv: 0,
+        category:this.category
+    }
+    mongoDb.open(function(err, db) {
+        db.collection('upload', function(err, collection) {
+            collection.insert(upload, function(err, upload) {
+                mongoDb.close();
+                callback(null, upload)
+            })
+        })
+    })
+}
+
+/*获取文章标题，防止文章标题一样*/
+Upload.getTitle = function(title, callback) {
+    mongoDb.open(function(err, db) {
+        db.collection('upload', function(err, collection) {
+            collection.findOne({ title: title }, function(err, upload) {
+                //console.log("getTitle.upload======>:",upload)
+                mongoDb.close();
+                callback(null, upload)
+            })
+        })
+    })
+}
+
+/**
+ * [Search description]
+ * @param {[type]}   keywords [搜索关键字]
+ * @param {Function} callback [description]
+ * return 返回搜索结果和统计条数以及一次查询几条
+ */
+function Search(keywords, callback) {
     var keyword = keywords.keyword,
         limit = {},
         page = keywords.page || 1
@@ -237,76 +245,79 @@ function Search(keywords, callback) {
         })
     })
 }
+
 /*获取文章列表（每次num条）*/
 Upload.getList = function(data, callback) {
-        var num = 5
-        mongoDb.open(function(err, db) {
-            db.collection('upload', function(err, collection) {
-                if(data.type){
-                    collection.count({'category':data.type}, function(err, count) {
-                        collection.find({'category':data.type}, {
-                            limit: num,
-                            skip: (data.page - 1) * num
-                        }).sort({
-                            time: -1
-                        }).toArray(function(err, list) {
+    var num = 5
+    mongoDb.open(function(err, db) {
+        db.collection('upload', function(err, collection) {
+            if(data.type){
+                collection.count({'category':data.type}, function(err, count) {
+                    collection.find({'category':data.type}, {
+                        limit: num,
+                        skip: (data.page - 1) * num
+                    }).sort({
+                        time: -1
+                    }).toArray(function(err, list) {
+                        mongoDb.close();
+                        var page = {}
+                        page["count"] = count
+                        page["limitNum"] = num
+                        callback(null, list, page)
+                    })
+                });
+            }else{
+                collection.count({}, function(err, count) {
+                    collection.find({}, {
+                        limit: num,
+                        skip: (data.page - 1) * num
+                    }).sort({
+                        time: -1
+                    }).toArray(function(err, list) {
+                        mongoDb.close();
+                        var page = {}
+                        page["count"] = count
+                        page["limitNum"] = num
+                        callback(null, list, page)
+                    })
+                });
+            }
+        })
+
+    })
+}
+
+/*获取具体的一篇文章*/
+Upload.getOne = function(name, day, title, callback) {
+    mongoDb.open(function(err, db) {
+        db.collection('upload', function(err, collection) {
+            collection.findOne({
+                "name": name,
+                "time.day": day,
+                "title": title
+            }, function(err, oneDoc) {
+                if (oneDoc) {
+                    collection.update({
+                            "name": name,
+                            "time.day": day,
+                            "title": title
+                        }, {
+                            $inc: { "pv": 1 }
+                        }, function(err) {
                             mongoDb.close();
-                            var page = {}
-                            page["count"] = count
-                            page["limitNum"] = num
-                            callback(null, list, page)
+                            if (err) {
+                                return callback(err);
+                            }
                         })
-                    });
-                }else{
-                    collection.count({}, function(err, count) {
-                        collection.find({}, {
-                            limit: num,
-                            skip: (data.page - 1) * num
-                        }).sort({
-                            time: -1
-                        }).toArray(function(err, list) {
-                            mongoDb.close();
-                            var page = {}
-                            page["count"] = count
-                            page["limitNum"] = num
-                            callback(null, list, page)
-                        })
-                    });
+                        //console.log("oneDoc======>:",oneDoc)
+                    callback(null, oneDoc)
                 }
             })
+        })
+    })
+}
 
-        })
-    }
-    /*获取具体的一篇文章*/
-Upload.getOne = function(name, day, title, callback) {
-        mongoDb.open(function(err, db) {
-            db.collection('upload', function(err, collection) {
-                collection.findOne({
-                    "name": name,
-                    "time.day": day,
-                    "title": title
-                }, function(err, oneDoc) {
-                    if (oneDoc) {
-                        collection.update({
-                                "name": name,
-                                "time.day": day,
-                                "title": title
-                            }, {
-                                $inc: { "pv": 1 }
-                            }, function(err) {
-                                mongoDb.close();
-                                if (err) {
-                                    return callback(err);
-                                }
-                            })
-                            //console.log("oneDoc======>:",oneDoc)
-                        callback(null, oneDoc)
-                    }
-                })
-            })
-        })
-    }
-    /*插入评论*/
+/*插入评论*/
 function Comment(name, day, title, comments, callback) {
     var date = new Date()
     mongoDb.open(function(err, db) {
@@ -325,6 +336,7 @@ function Comment(name, day, title, comments, callback) {
         })
     })
 }
+
 /*关于网站*/
 function About(content, callback) {
     mongoDb.open(function(err, db) {
@@ -367,60 +379,29 @@ function About(content, callback) {
         })
     })
 }
+
 About.getInfo = function(callback) {
-        mongoDb.open(function(err, db) {
-            db.collection('about', function(err, collection) {
+    mongoDb.open(function(err, db) {
+        db.collection('about', function(err, collection) {
+            if (err) {
+                return callback(err.toString());
+            }
+            collection.findOne({ "title": "about" }, function(err, oneDoc) {
                 if (err) {
                     return callback(err.toString());
                 }
-                collection.findOne({ "title": "about" }, function(err, oneDoc) {
-                    if (err) {
-                        return callback(err.toString());
-                    }
-                    if (oneDoc) {
-                        //console.log(oneDoc)
-                        mongoDb.close();
-                        callback(null, oneDoc)
-                    }
-                })
+                if (oneDoc) {
+                    //console.log(oneDoc)
+                    mongoDb.close();
+                    callback(null, oneDoc)
+                }
             })
         })
-    }
-    /* node请求接口示例*/
-function post(url, data, fn) {
-    data = data || {};
-    var content = require('querystring').stringify(data);
-    var parse_u = require('url').parse(url, true);
-    var isHttp = parse_u.protocol == 'http:';
-    var options = {
-        host: parse_u.hostname,
-        port: parse_u.port || (isHttp ? 80 : 443),
-        path: parse_u.path,
-        method: 'POST',
-        headers: {
-            'Content-Type': 'application/x-www-form-urlencoded',
-            'Content-Length': content.length
-        }
-    };
-    var req = require(isHttp ? 'http' : 'https').request(options, function(res) {
-        var _data = '';
-        res.on('data', function(chunk) {
-            _data += chunk;
-        });
-        res.on('end', function() {
-            fn != undefined && fn(_data);
-        });
-    });
-    req.write(content);
-    req.end();
+    })
 }
 
 
-/* node请求接口示例
-var data={"phone": 111,"passWord":111111,"phoneCaptcha":2122,"nickName":"sdfsdf","kind":1,"client":"H5","source":1}
-post("http://wtest.api.wttai.com/member/register",data,function(_data){
-  console.log("_data====>",_data)
-})*/
+
 app.get('/', function(req, res) {
     res.end("开发模式下请输入 localhost:7070")
 })
@@ -480,7 +461,6 @@ app.post('/publish', function(req, res) {
         if (err) {
             return console.log(err);
         }
-        //console.log("req====>",req.body,req.file)
         Upload.getTitle(req.body.title, function(err, title) {
             if (title) {
                 return res.json({ code: 1002, messgage: "标题已存在" })
@@ -506,7 +486,6 @@ app.get('/newsList', function(req, res) {
     var type = category?category:''
     var params = {"type":type,"page":page}
     Upload.getList(params, function(err, list, page) {
-        //res.writeHead(200,{'content-type':'text/json',"Access-Control-Allow-Origin":"http://localhost:7070"})
         var data = {}
         data["data"] = list
         data["page"] = page
