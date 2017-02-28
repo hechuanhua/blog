@@ -6,18 +6,7 @@
  */
 import {combineReducers,createStore,applyMiddleware} from "redux"
 import thunkMiddleware from 'redux-thunk'
-var navJson=[{"link":"","text":"首页"},{"link":"qiche","text":"汽车知识"},{"link":"news","text":"新闻中心"},{"link":"about","text":"关于我们"},{"link":"jishu","text":"技术中心"}]
-const switchNav = (state = navJson, action) => {
-  switch (action.type) {
-    case 'CLICK':
-      return [
-        ...state,
-        66666
-      ]
-    default:
-      return state
-  }
-}
+
 /*切换菜单栏*/
 const switchNews = (state = [], action) => {
   switch (action.type) {
