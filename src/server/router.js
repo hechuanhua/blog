@@ -63,7 +63,7 @@ function renderFullPage(html, preloadedState) {
         <!doctype html>
         <html>
             <head>
-                <title>Redux Universal Example</title>
+                <title>我的个人网站</title>
                 <link href="http://www.hechuanhua.cn/index.3ec990c29dfbd2152ad7.css" rel="stylesheet"></head>
             </head>
             <body>
