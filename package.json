@@ -4,6 +4,7 @@
   "description": "reactBlog",
   "main": "index.js",
   "scripts": {
+    "start": "babel-node app.js",
     "node": "nodemon server.js",
     "pm2node": "pm2 start server.js",
     "dev": "webpack-dev-server --devtool eval --progress --colors --hot",
