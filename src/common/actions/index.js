@@ -1,6 +1,6 @@
 
 import { hashHistory } from 'react-router'
-export const requestAPI = "http://localhost:8080/"
+export const requestAPI = "http://localhost:8080/api/"
 
     export const SwitchTab = (type, data) => {
         return {
@@ -196,6 +196,7 @@ export const requestAPI = "http://localhost:8080/"
                 return response.json();
             })
             .then(function(data) {
+                
                 return dispatch(SwitchTab(type, data))
             })
             .catch(function(e) {

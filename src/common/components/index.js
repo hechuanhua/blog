@@ -12,6 +12,7 @@ export class Index extends Component {
     // }
     // componentWillMount() {
     //     console.log("Index==>componentWillMount111")
+    //     console.log(this.props,999)
     //     //this.props.actions.ajaxData("index")
     // }
     // componentDidMount() {
@@ -32,13 +33,14 @@ export class Index extends Component {
     //     console.log("Index==>componentDidUpdate666")
     // }
     render() {
-        var type = location.hash.match(/category=\d+/) ? 'category' : 'index'
-        var categoryType = type == 'category'?location.hash.match(/category=\d+/).join('').match(/\d/)[0]:''
+        console.log(this.props,'Index')
+        var type = this.props.location.hash.match(/category=\d+/) ? 'category' : 'index'
+        var categoryType = type == 'category'?this.props.location.hash.match(/category=\d+/).join('').match(/\d/)[0]:''
         //var category = location.hash.match(/category=\d+/) ? location.hash.match(/category=\d+/).join('').match(/\d/)[0] : ''
         let data = this.props.index;
         return <div className = "index" >
-            < ArticleList articleList = { data.data } ajaxData = { this.props.actions.ajaxData } type = { type } query = { this.props.query } /> 
-            < PageLi pageList = { data.page } ajaxData = { this.props.actions.ajaxData } type = { type } query = { this.props.query } actions = { this.props.actions } categoryType = { categoryType }/> < /div>
+            < ArticleList articleList = { data.data } ajaxData = { this.props.actions.ajaxData } type = { type } query = { this.props.location.query } /> 
+            < PageLi pageList = { data.page } ajaxData = { this.props.actions.ajaxData } type = { type } query = { this.props.location.query } actions = { this.props.actions } categoryType = { categoryType }/> < /div>
     }
 }
 

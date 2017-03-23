@@ -16,8 +16,8 @@ var app = express()
 import thunkMiddleware from 'redux-thunk'
 import createLocation from 'history/createBrowserHistory'
 import webpackHotMiddleware from 'webpack-hot-middleware'
-import stores from './src/common/reducers/index'
-import rootRoute from './src/common/route'
+import stores from './common/reducers/index'
+import rootRoute from './common/route'
 import React, { Component } from 'react'
 import { renderToString } from 'react-dom/server'
 import { combineReducers, createStore, applyMiddleware } from "redux"
@@ -26,13 +26,13 @@ import { Provider } from 'react-redux'
 
 var webpack = require('webpack')
 var webpackDevMiddleware = require('webpack-dev-middleware')
-var WebpackConfig = require('./webpack.config')
+var WebpackConfig = require('../webpack.config')
 
 
 var accessLog = fs.createWriteStream('access.log', { flags: 'a' })
 var errorLog = fs.createWriteStream('error.log', { flags: 'a' })
 var compiler = webpack(WebpackConfig)
-var router = require('./src/server/router')
+var router = require('./server/router')
 
 app.set('port', 8080)
 app.use(logger('short'))

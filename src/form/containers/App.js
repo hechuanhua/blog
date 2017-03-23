@@ -1,7 +1,7 @@
 import React from 'react'
 import { bindActionCreators } from 'redux'
 import { connect } from 'react-redux'
-import * as actions from "../../js/actions/index.js"
+import * as actions from "../../common/actions/index.js"
 import EditBox from "./EditBox.js"
 import ModalBox from "./ModalBox.js"
 import PreviewBox from "./PreviewBox.js"

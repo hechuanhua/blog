@@ -15,14 +15,24 @@ const MessageItem=({data})=>{
 export class DetailsComponent extends Component{
     constructor(props) {
         super(props)
-        this.nameVlue = window.localStorage['commentInfo']?JSON.parse(window.localStorage['commentInfo']).name:''
-        this.emailValue = window.localStorage['commentInfo']?JSON.parse(window.localStorage['commentInfo']).email:''
+        this.nameVlue = ''
+        this.emailValue = ''    
     }
 
     componentWillMount() {
         this.props.actions.ajaxData("details", this.props.params)
     }
-
+    componentDidMount(){
+        this.nameVlue = window.localStorage['commentInfo']?JSON.parse(window.localStorage['commentInfo']).name:''
+        this.emailValue = window.localStorage['commentInfo']?JSON.parse(window.localStorage['commentInfo']).email:''
+    }
+    changeValue(e,type){
+        if(type == 'name'){
+            this.nameVlue = e.target.value
+        }else{
+            this.email = e.target.value
+        }
+    }
     commentsSubmit() {
         let _alert = this.props.actions._alert,
             nameVlue = this.name.value.trim(),
@@ -43,9 +53,11 @@ export class DetailsComponent extends Component{
     }
 
     render(){
+        
         let data=this.props.details;
         let img=data.upload?("<img src="+actions.requestAPI+data.upload+"></img>"):""
         let messageItemTmp=[]
+        
         if(data.comments){
             for(let len=data.comments.length,i=len-1;i>=0;i--){
                 messageItemTmp.push(<MessageItem key={i} data={data.comments[i]}/>)
@@ -68,13 +80,13 @@ export class DetailsComponent extends Component{
             <div className="formItem">
                 <span className="name">姓名：</span>
                 <div className="inputDiv">
-                    <input type="text" name="name" ref={el=>{this.name=el}} placeholder="最少2位数" defaultValue={this.nameVlue}/>
+                    <input type="text" name="name" ref={el=>{this.name=el}} placeholder="最少2位数" value={this.nameVlue} onChange={(event)=>{this.changeValue(event,'name')}}/>
                 </div>
             </div>
             <div className="formItem">
                 <span className="name">邮箱：</span>
                 <div className="inputDiv">
-                    <input type="email" name="email" ref={el=>{this.email=el}} defaultValue={this.emailValue} />
+                    <input type="email" name="email" ref={el=>{this.email=el}} value={this.emailValue} onChange={(event)=>{this.changeValue(event,'email')}} />
                 </div>
             </div>
             <div className="formItem">

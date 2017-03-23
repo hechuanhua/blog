@@ -7,12 +7,17 @@ var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 var prod = process.env.NODE_ENV === 'production' ? true : false;
 
 module.exports = {
-    entry: { index: './src/index.js' },
+    entry: { 
+        index: [
+        'webpack-hot-middleware/client',
+        './src/client/index' 
+        ]
+    },
     output: {
-        path: path.resolve(__dirname, prod ? "./dist" : "./build"), //静态资源会再这目录下
+        path: path.resolve(__dirname, prod ? "./dist" : "/"), //静态资源会再这目录下
         filename: prod ? "js/[name].[hash].min.js" : "js/[name].js",
         chunkFilename: prod ? "js/[name].[hash].chunk.js" : "js/[name].js",
-        publicPath: prod ? "" : "" //html里面的引用路径会变成这个
+        publicPath: prod ? "/" : "/" //html里面的引用路径会变成这个
     },
     resolve: {
         extensions: ['', '.js', '.less', '.css', '.png', '.jpg'], //第一个是空字符串! 对应不需要后缀的情况.
@@ -53,27 +58,27 @@ module.exports = {
         //     loaders: ['es3ify-loader'],
         // }]
     },
-    plugins: [
-        new HtmlWebpackPlugin({
-            filename: 'index.html',
-            template: './index.html'
-        }),
-        new webpack.DefinePlugin({
-            'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        }),
-    ],
-    devServer: {
-        port: 7070,
-        hot: true,
-        historyApiFallback: true,
-        publicPath: "",
-        stats: {
-            colors: true
-        },
-        plugins: [
-            new webpack.HotModuleReplacementPlugin()
-        ]
-    }
+    // plugins: [
+    //     new HtmlWebpackPlugin({
+    //         filename: 'index.html',
+    //         template: './index.html'
+    //     }),
+    //     new webpack.DefinePlugin({
+    //         'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
+    //     }),
+    // ],
+    // devServer: {
+    //     port: 7070,
+    //     hot: true,
+    //     historyApiFallback: true,
+    //     publicPath: "",
+    //     stats: {
+    //         colors: true
+    //     },
+    //     plugins: [
+    //         new webpack.HotModuleReplacementPlugin()
+    //     ]
+    // }
 }
 if (prod) {
     module.exports.plugins = (module.exports.plugins || [])
@@ -98,7 +103,7 @@ if (prod) {
         ]);
     //module.exports.devtool = 'source-map';
 } else {
-    module.exports.devtool = 'source-map';
+    //module.exports.devtool = 'source-map';
     module.exports.plugins = (module.exports.plugins || [])
         .concat([ 
             new ExtractTextPlugin('[name].css', {
