@@ -8,7 +8,7 @@
     "node": "nodemon server.js",
     "pm2node": "pm2 start server.js",
     "dev": "webpack-dev-server --devtool eval --progress --colors --hot",
-    "dist": "cross-env NODE_ENV=production webpack --config webpack.server.config.js --progress --colors babel-node app.js"
+    "dist": "cross-env NODE_ENV=production webpack --config webpack.server.config.js --progress --colors node dist/app.js"
   },
   "author": "hechuanhua",
   "license": "MIT",

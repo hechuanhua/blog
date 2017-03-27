@@ -5,7 +5,7 @@ var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CleanPlugin = require('clean-webpack-plugin');
 var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 
-module.exports = {
+module.exports = [{
     entry: { 
         index: [
             './src/client/index' 
@@ -58,21 +58,21 @@ module.exports = {
     },
     plugins: [
         new CleanPlugin(['dist']),
-        // new webpack.optimize.UglifyJsPlugin({
-        //     compress: {
-        //         warnings: false,
-        //         //drop_debugger: true,
-        //         drop_console: true
-        //     }
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+                //drop_debugger: true,
+                drop_console: true
+            }
+        }),
+        new webpack.optimize.OccurenceOrderPlugin(), //按引用频度来排序 ID，以便达到减少文件大小的效果
+        // new ExtractTextPlugin('[name].[hash].css', {
+        //     allChunks: true
         // }),
-        // new webpack.optimize.OccurenceOrderPlugin(), //按引用频度来排序 ID，以便达到减少文件大小的效果
-        // // new ExtractTextPlugin('[name].[hash].css', {
-        // //     allChunks: true
-        // // }),
-        // new CommonsChunkPlugin({
-        //     name: 'common',
-        //     minChunks: Infinity
-        // }),
+        new CommonsChunkPlugin({
+            name: 'common',
+            minChunks: Infinity
+        }),
         new HtmlWebpackPlugin({
             filename: 'index.html',
             template: './src/index.html'
@@ -82,48 +82,57 @@ module.exports = {
         }),
     ],
     devtool : 'source-map'
-    // devServer: {
-    //     port: 7070,
-    //     hot: true,
-    //     historyApiFallback: true,
-    //     publicPath: "",
-    //     stats: {
-    //         colors: true
-    //     },
-    //     plugins: [
-    //         new webpack.HotModuleReplacementPlugin()
-    //     ]
-    // }
-}
-// if (prod) {
-//     module.exports.plugins = (module.exports.plugins || [])
-//         .concat([
-//             new CleanPlugin(['dist']),
-//             new webpack.optimize.UglifyJsPlugin({
-//                 compress: {
-//                     warnings: false,
-//                     //drop_debugger: true,
-//                     drop_console: true
-//                 }
-//             }),
-//             new webpack.optimize.OccurenceOrderPlugin(), //按引用频度来排序 ID，以便达到减少文件大小的效果
-//             // new ExtractTextPlugin('[name].[hash].css', {
-//             //     allChunks: true
-//             // }),
-//             new CommonsChunkPlugin({
-//                 name: 'common',
-//                 minChunks: Infinity
-//             }),
-//         ]);
-//     //module.exports.devtool = 'source-map';
-// } else {
-//     module.exports.devtool = 'source-map'
-//     module.exports.plugins = (module.exports.plugins || [])
-//         .concat([ 
-//             new ExtractTextPlugin('[name].css', {
-//                 allChunks: true
-//             }),
-//             new webpack.HotModuleReplacementPlugin(),
-//             new webpack.NoErrorsPlugin(),
-//         ])
-// }
+}, {
+    name: "server-side rendering",
+    context: path.join(__dirname, "./"),
+    target: "node",
+    entry: {
+        server: ['babel-polyfill', '.app.js']
+    },
+    output: {
+        path: './dist',
+        filename: "app.js",
+        publicPath: "/",
+        libraryTarget: "commonjs2"
+    },
+    plugins: [
+        new webpack.optimize.OccurenceOrderPlugin(), new webpack.optimize.UglifyJsPlugin({
+            compressor: {
+                warnings: false
+            }
+        }), 
+        new webpack.DefinePlugin({
+            __DEVCLIENT__: false,
+            __DEVSERVER__: false,
+            'process.env': {
+                'NODE_ENV': JSON.stringify('production')
+            }
+        }),
+        new webpack.IgnorePlugin(/vertx/)
+    ],
+    module: {
+        preLoaders: [{
+            test: /\.js$|\.jsx$/,
+            loader: "eslint-loader",
+            exclude: /node_modules/
+        }],
+        loaders: [{
+            test: /\.js$|\.jsx$/,
+            loader: 'babel',
+            query: {
+                "presets": ["es2015", "react", "stage-0"],
+                "plugins": ["transform-es5-property-mutators","transform-jscript","transform-es3-property-literals","transform-es3-member-expression-literals"]
+            },
+            include: path.join(__dirname, '..', 'src'),
+            exclude: /node_modules/,
+        },
+        {
+            test: /\.(jpe?g|png|gif)$/i,
+            loaders: ['url?limit=10000&name=images/[hash:8].[name].[ext]', 'image-webpack?{progressive:true, optimizationLevel: 7, interlaced: false, pngquant:{quality: "65-90", speed: 4}}']
+        }]
+    },
+    resolve: {
+        extensions: ['', '.js', '.jsx', '.css'],
+        modulesDirectories: ["src", "node_modules"]
+    }
+}]
