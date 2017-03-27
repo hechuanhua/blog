@@ -26,13 +26,23 @@ import { Provider } from 'react-redux'
 
 var webpack = require('webpack')
 var webpackDevMiddleware = require('webpack-dev-middleware')
-var WebpackConfig = require('./webpack.config')
+var WebpackConfig = require('./webpack.dev.config')
 
 
 var accessLog = fs.createWriteStream('access.log', { flags: 'a' })
 var errorLog = fs.createWriteStream('error.log', { flags: 'a' })
 var compiler = webpack(WebpackConfig)
 var router = require('./src/server/router')
+console.log(process.env.NODE_ENV,88888)
+// if( process.env.NODE_ENV !== 'production'){
+//     app.use(webpackDevMiddleware(compiler, {
+//         publicPath: '',
+//         stats: {
+//             colors: true
+//         }
+//     }))
+//     app.use(webpackHotMiddleware(compiler))
+// }
 
 app.set('port', 8080)
 app.use(logger('short'))
@@ -43,13 +53,6 @@ app.use(function(err, req, res, next) {
     next()
 })
 app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 0 }))
-app.use(webpackDevMiddleware(compiler, {
-    publicPath: '',
-    stats: {
-        colors: true
-    }
-}))
-app.use(webpackHotMiddleware(compiler))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(session({
@@ -61,3 +64,4 @@ app.all('*',router)
 app.listen(app.get('port'), function() {
     console.log('请打开浏览器localhost: ' + app.get('port'))
 })
+
