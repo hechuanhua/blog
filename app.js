@@ -12,19 +12,8 @@ var Db = require('mongodb').Db
 var mongoDb = new Db('blog', new Server('localhost', 27017, { safe: true }))
 var app = express()
 
-
-import thunkMiddleware from 'redux-thunk'
-import createLocation from 'history/createBrowserHistory'
-import webpackHotMiddleware from 'webpack-hot-middleware'
-import stores from './src/common/reducers/index'
-import rootRoute from './src/common/route'
-import React, { Component } from 'react'
-import { renderToString } from 'react-dom/server'
-import { combineReducers, createStore, applyMiddleware } from "redux"
-import { match, RouterContext } from 'react-router'
-import { Provider } from 'react-redux'
-
 var webpack = require('webpack')
+var webpackHotMiddleware = require('webpack-hot-middleware')
 var webpackDevMiddleware = require('webpack-dev-middleware')
 var WebpackConfig = require('./webpack.dev.config')
 
@@ -32,17 +21,20 @@ var WebpackConfig = require('./webpack.dev.config')
 var accessLog = fs.createWriteStream('access.log', { flags: 'a' })
 var errorLog = fs.createWriteStream('error.log', { flags: 'a' })
 var compiler = webpack(WebpackConfig)
-var router = require('./src/server/router')
-console.log(process.env.NODE_ENV,88888)
-// if( process.env.NODE_ENV !== 'production'){
-//     app.use(webpackDevMiddleware(compiler, {
-//         publicPath: '',
-//         stats: {
-//             colors: true
-//         }
-//     }))
-//     app.use(webpackHotMiddleware(compiler))
-// }
+
+
+if( process.env.NODE_ENV !== 'production'){
+    var router = require('./src/server')
+    app.use(webpackDevMiddleware(compiler, {
+        publicPath: '',
+        stats: {
+            colors: true
+        }
+    }))
+    app.use(webpackHotMiddleware(compiler))
+}else{
+    var router = require('./dist/server')
+}
 
 app.set('port', 8080)
 app.use(logger('short'))
