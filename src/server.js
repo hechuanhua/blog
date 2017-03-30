@@ -14,9 +14,8 @@ import { combineReducers, createStore, applyMiddleware } from "redux"
 import { match, RouterContext} from 'react-router'
 import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
-import createLocation from 'history/createBrowserHistory'
-import stores from '../common/reducers/index'
-import rootRoute from '../common/route'
+import stores from './common/reducers/index'
+import rootRoute from './common/route'
 
 function fsExistsSync(path) {
     try {
@@ -49,13 +48,16 @@ var storage = multer.diskStorage({
 
 var uploadImg = multer({ storage: storage }).single('upload')
 
-if (!fsExistsSync('../../dist')) {
-    console.log(111)
-    fs.mkdir(path.join(__dirname, '../../dist'))
-    if (!fsExistsSync('../../dist/images')) {
-        console.log(2222)
-        fs.mkdir(path.join(__dirname, '../../dist/images'))
+if (!fsExistsSync(path.join(__dirname, '../dist'))) {
+    fs.mkdir(path.join(__dirname, '../dist'))
+
+    if (!fsExistsSync(path.join(__dirname, '../dist/images'))) {
+        fs.mkdir(path.join(__dirname, '../dist/images'))
     }
+}
+
+if (!fsExistsSync(path.join(__dirname, '../dist/images'))) {
+    fs.mkdir(path.join(__dirname, '../dist/images'))
 }
 
 function renderFullPage(html, preloadedState) {

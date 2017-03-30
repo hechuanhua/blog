@@ -4,20 +4,21 @@ var ExtractTextPlugin = require('extract-text-webpack-plugin');
 var HtmlWebpackPlugin = require('html-webpack-plugin');
 var CleanPlugin = require('clean-webpack-plugin');
 var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
-
+var prod = process.env.NODE_ENV === 'production' ? true : false;
 
 module.exports = {
+    target: "node",
+    context: path.join(__dirname, "./"),
     entry: { 
         index: [
-        'webpack-hot-middleware/client',
-        './src/client/index' 
+            './src/server' 
         ]
     },
     output: {
-        path: path.resolve(__dirname,  "/"), //静态资源会再这目录下
-        filename: "js/[name].js",
-        chunkFilename: "js/[name].js",
-        publicPath: "/" //html里面的引用路径会变成这个
+        path: path.resolve(__dirname,  "./dist"), //静态资源会再这目录下
+        filename: "server.js",
+        publicPath: "/", //html里面的引用路径会变成这个
+        libraryTarget: "commonjs2"
     },
     resolve: {
         extensions: ['', '.js', '.less', '.css', '.png', '.jpg'], //第一个是空字符串! 对应不需要后缀的情况.
@@ -33,6 +34,9 @@ module.exports = {
               presets: [["es2015", { "loose": true }],'react','stage-0'],
               // plugins: ["transform-es5-property-mutators","transform-jscript","transform-es3-property-literals","transform-es3-member-expression-literals",]
             }
+        }, {   
+            test: /\.json$/, 
+            loader: "json-loader" 
         }, {
             test: /\.css$/,
             exclude: /node_modules/,
@@ -59,30 +63,20 @@ module.exports = {
         // }]
     },
     plugins: [
-        new ExtractTextPlugin('[name].css', {
-            allChunks: true
+        new webpack.DefinePlugin({
+            'process.env.NODE_ENV': JSON.stringify('production')
         }),
-        new webpack.HotModuleReplacementPlugin(),
-        new webpack.NoErrorsPlugin(),
-        // new HtmlWebpackPlugin({
-        //     filename: 'index.html',
-        //     template: './index.html'
-        // }),
-        // new webpack.DefinePlugin({
-        //     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        // }),
+        //new CleanPlugin(['dist/js']),
+        new webpack.optimize.UglifyJsPlugin({
+            compress: {
+                warnings: false,
+                //drop_debugger: true,
+                drop_console: true
+            }
+        }),
+        new webpack.IgnorePlugin(/vertx/),
     ],
-    // devServer: {
-    //     port: 7070,
-    //     hot: true,
-    //     historyApiFallback: true,
-    //     publicPath: "",
-    //     stats: {
-    //         colors: true
-    //     },
-    //     plugins: [
-    //         new webpack.HotModuleReplacementPlugin()
-    //     ]
-    // }
+
 }
+
 

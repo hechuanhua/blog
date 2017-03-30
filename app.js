@@ -13,25 +13,18 @@ var mongoDb = new Db('blog', new Server('localhost', 27017, { safe: true }))
 var app = express()
 
 
-import thunkMiddleware from 'redux-thunk'
-import createLocation from 'history/createBrowserHistory'
-import webpackHotMiddleware from 'webpack-hot-middleware'
-import stores from './src/common/reducers/index'
-import rootRoute from './src/common/route'
-import React, { Component } from 'react'
-import { renderToString } from 'react-dom/server'
-import { combineReducers, createStore, applyMiddleware } from "redux"
-import { match, RouterContext } from 'react-router'
-import { Provider } from 'react-redux'
+
 
 var webpack = require('webpack')
 var webpackDevMiddleware = require('webpack-dev-middleware')
+var webpackHotMiddleware = require('webpack-hot-middleware')
 var WebpackConfig = require('./webpack.config')
-
+var compiler = webpack(WebpackConfig)
 
 var accessLog = fs.createWriteStream('access.log', { flags: 'a' })
 var errorLog = fs.createWriteStream('error.log', { flags: 'a' })
-var compiler = webpack(WebpackConfig)
+
+
 var router = require('./src/server/router')
 
 app.set('port', 8080)
