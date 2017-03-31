@@ -22,7 +22,7 @@ blog在线预览地址：http://www.hechuanhua.cn
     npm start
     浏览器输入 localhost:8080
 
-##### 生产环境(暂时有问题)
+##### 生产环境
     npm run dist
     浏览器输入 localhost:8080
 
