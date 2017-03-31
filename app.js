@@ -23,7 +23,7 @@ var compiler = webpack(WebpackConfig)
 
 global.isDev = process.env.NODE_ENV == 'production' ? false : true
 var port = isDev ? '8080' : '8080'
-
+console.log('process.env.NODE_ENV',process.env.NODE_ENV)
 if ( isDev ) {
     var router = require('./src/server')
     app.use(webpackHotMiddleware(compiler))
