@@ -8,7 +8,7 @@
     "node": "nodemon server.js",
     "pm2node": "pm2 start server.js",
     "dev": "webpack-dev-server --devtool eval --progress --colors --hot",
-    "dist": "set NODE_ENV=production&&webpack -p --progress --colors",
+    "dist": "set NODE_ENV=production&&webpack --config webpack.server.config.js --progress --colors&&node app.js",
     "dist1": "set NODE_ENV=production && webpack --config webpack.server.config.js --progress --colors",
     "dist2": "set NODE_ENV=production && webpack --config webpack.server1.config.js --progress --colors"
   },

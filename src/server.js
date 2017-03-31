@@ -60,7 +60,7 @@ if (!fsExistsSync(path.join(__dirname, '../dist/images'))) {
     fs.mkdir(path.join(__dirname, '../dist/images'))
 }
 
-function renderFullPage(html, preloadedState) {
+function renderFullPage(html, initialState) {
     return `
         <!doctype html>
         <html>
@@ -71,7 +71,7 @@ function renderFullPage(html, preloadedState) {
             <body>
                 <div id="root">${html}</div>
                 <script>
-                  window.__INITIAL_STATE__ = ${JSON.stringify(preloadedState)}
+                  window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
                 </script>
                 <script src="/js/index.js"></script>
             </body>
@@ -97,8 +97,19 @@ function handleRender(req, res, next) {
                   <RouterContext {...renderProps} />
                 </Provider>
             )
-            const preloadedState = store.getState()
-            res.send(renderFullPage(html, preloadedState))
+            const initialState = store.getState()
+
+            if( isDev ){
+
+                res.set('Content-Type', 'text/html')
+                return res.status(200).send(renderFullPage(html, initialState))
+            }else{
+                return res.status(200).send(renderFullPage(html, initialState))
+                return res.render('index', {__html__: html,__state__: JSON.stringify(initialState)})
+
+            }
+
+            
 
         } else {
             res.status(404).end('Not found');

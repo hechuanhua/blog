@@ -12,22 +12,32 @@ var Db = require('mongodb').Db
 var mongoDb = new Db('blog', new Server('localhost', 27017, { safe: true }))
 var app = express()
 
-
-
+var accessLog = fs.createWriteStream('access.log', { flags: 'a' })
+var errorLog = fs.createWriteStream('error.log', { flags: 'a' })
 
 var webpack = require('webpack')
 var webpackDevMiddleware = require('webpack-dev-middleware')
 var webpackHotMiddleware = require('webpack-hot-middleware')
-var WebpackConfig = require('./webpack.config')
+var WebpackConfig = require('./webpack.dev.config')
 var compiler = webpack(WebpackConfig)
 
-var accessLog = fs.createWriteStream('access.log', { flags: 'a' })
-var errorLog = fs.createWriteStream('error.log', { flags: 'a' })
+global.isDev = process.env.NODE_ENV == 'production' ? false : true
+var port = isDev ? '8080' : '8080'
 
+if ( isDev ) {
+    var router = require('./src/server')
+    app.use(webpackHotMiddleware(compiler))
+    app.use(webpackDevMiddleware(compiler, {
+        publicPath: '',
+        stats: {
+            colors: true
+        }
+    })) 
+} else {
+    var router = require('./dist/server')
+}
 
-var router = require('./src/server/router')
-
-app.set('port', 8080)
+app.set('port', port)
 app.use(logger('short'))
 app.use(logger({ stream: accessLog }))
 app.use(function(err, req, res, next) {
@@ -36,13 +46,6 @@ app.use(function(err, req, res, next) {
     next()
 })
 app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 0 }))
-app.use(webpackDevMiddleware(compiler, {
-    publicPath: '',
-    stats: {
-        colors: true
-    }
-}))
-app.use(webpackHotMiddleware(compiler))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(session({

@@ -68,9 +68,10 @@ module.exports = {
         //     filename: 'index.html',
         //     template: './index.html'
         // }),
-        // new webpack.DefinePlugin({
-        //     'process.env.NODE_ENV': JSON.stringify(process.env.NODE_ENV)
-        // }),
+        new webpack.DefinePlugin({
+            __DEVSERVER__:true,
+            'process.env.NODE_ENV': JSON.stringify('development')
+        }),
     ],
     // devServer: {
     //     port: 7070,
