@@ -23,7 +23,7 @@ blog在线预览地址：http://www.hechuanhua.cn
     浏览器输入 localhost:8080
 
 ##### 生产环境
-    npm run dist
+    npm run dist(npm run dist_linux)
     浏览器输入 localhost:8080
 
 ### 2017-03-30

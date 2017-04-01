@@ -6,7 +6,8 @@
   "scripts": {
     "start": "babel-node app.js",
     "dist": "set NODE_ENV=production&&webpack --config webpack.server.config.js --progress --colors&&node app.js",
-    "dist_linux": "export NODE_ENV=production webpack --config webpack.server.config.js --progress --colors node app.js"
+    "dist_linux": "export NODE_ENV=production webpack --config webpack.server.config.js --progress --colors node app.js",
+    "pm2":"pm2 start app.js"
   },
   "author": "hechuanhua",
   "license": "MIT",
