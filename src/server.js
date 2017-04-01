@@ -17,14 +17,6 @@ import thunkMiddleware from 'redux-thunk'
 import stores from './common/reducers/index'
 import rootRoute from './common/route'
 
-function fsExistsSync(path) {
-    try {
-        fs.accessSync(path, fs.F_OK);
-    } catch (e) {
-        return false;
-    }
-    return true;
-}
 
 var storage = multer.diskStorage({
 
@@ -48,13 +40,6 @@ var storage = multer.diskStorage({
 
 var uploadImg = multer({ storage: storage }).single('upload')
 
-if (!fsExistsSync(path.join(__dirname, '../dist'))) {
-    fs.mkdir(path.join(__dirname, '../dist'))
-}
-
-if (!fsExistsSync(path.join(__dirname, '../dist/images'))) {
-    fs.mkdir(path.join(__dirname, '../dist/images'))
-}
 
 function renderFullPage(html, initialState) {
     return `

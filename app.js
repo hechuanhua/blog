@@ -15,7 +15,22 @@ var app = express()
 var accessLog = fs.createWriteStream('access.log', { flags: 'a' })
 var errorLog = fs.createWriteStream('error.log', { flags: 'a' })
 
+function fsExistsSync(path) {
+    
+    try {
+        fs.accessSync(path, fs.F_OK)
+    } catch (e) {
+        return false
+    }
+    return true
+}
 
+if (!fsExistsSync(path.join(__dirname, './dist'))) {
+    fs.mkdir(path.join(__dirname, './dist'))
+}
+if (!fsExistsSync(path.join(__dirname, './dist/images'))) {
+    fs.mkdir(path.join(__dirname, './dist/images'))
+}
 
 
 global.isDev = process.env.NODE_ENV == 'production' ? false : true
