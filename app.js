@@ -17,6 +17,7 @@ var errorLog = fs.createWriteStream('error.log', { flags: 'a' })
 
 
 
+
 global.isDev = process.env.NODE_ENV == 'production' ? false : true
 var port = isDev ? '8080' : '8080'
 
