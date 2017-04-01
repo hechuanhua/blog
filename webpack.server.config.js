@@ -68,7 +68,7 @@ module.exports = [{
     plugins: [
         new HtmlWebpackPlugin({
             //favicon:path.join(__dirname,'../src/favicon.ico'),
-            title: "贺传华的个人网站",
+            title: "我的个人网站",
             template: path.join(__dirname,'./src/index.html'),
             filename: 'index.ejs',
             inject:'body',
