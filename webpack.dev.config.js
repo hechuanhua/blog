@@ -7,11 +7,9 @@ var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 
 
 module.exports = {
-    entry: { 
-        index: [
-        'webpack-hot-middleware/client',
-        './src/client/index' 
-        ]
+    entry: {
+        vendor: ['react','redux','react-redux','react-router'],
+        bundle: ['./src/client/index','webpack-hot-middleware/client']
     },
     output: {
         path: path.resolve(__dirname,  "/"), //静态资源会再这目录下

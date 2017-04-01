@@ -20,9 +20,6 @@ import { Provider, connect } from 'react-redux'
 import { combineReducers, createStore, applyMiddleware } from "redux"
 import { Router, Route, IndexRoute, Link, IndexLink, browserHistory, hashHistory, match } from 'react-router'
 import * as actions from '../common/actions/index'
-//import createHistory from 'history/createBrowserHistory'
-//import { syncHistoryWithStore } from 'react-router-redux'
-
 
 import stores from '../common/reducers/index'
 import Index from '../common/components/index'
@@ -31,16 +28,15 @@ import Nav from '../common/containers/nav'
 import TipsBox from '../common/containers/tipsBox'
 import route from '../common/route'
 
-// import "./less/style.less"
-// import './form/css/form.css'
+import "../less/style.less"
+import '../form/css/form.css'
 
 
 let store = createStore(
     stores,
     applyMiddleware(thunkMiddleware)
 )
-//const history = syncHistoryWithStore(browserHistory, store)
-//const history = createHistory()
+
 const About = require('../common/components/about')
 const Search = require('../common/components/search')
 const Details = require('../common/components/details')

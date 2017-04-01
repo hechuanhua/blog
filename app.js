@@ -15,16 +15,17 @@ var app = express()
 var accessLog = fs.createWriteStream('access.log', { flags: 'a' })
 var errorLog = fs.createWriteStream('error.log', { flags: 'a' })
 
-var webpack = require('webpack')
-var webpackDevMiddleware = require('webpack-dev-middleware')
-var webpackHotMiddleware = require('webpack-hot-middleware')
-var WebpackConfig = require('./webpack.dev.config')
-var compiler = webpack(WebpackConfig)
+
 
 global.isDev = process.env.NODE_ENV == 'production' ? false : true
 var port = isDev ? '8080' : '8080'
-console.log('process.env.NODE_ENV',process.env.NODE_ENV)
+
 if ( isDev ) {
+    var webpack = require('webpack')
+    var webpackDevMiddleware = require('webpack-dev-middleware')
+    var webpackHotMiddleware = require('webpack-hot-middleware')
+    var WebpackConfig = require('./webpack.dev.config')
+    var compiler = webpack(WebpackConfig)
     var router = require('./src/server')
     app.use(webpackHotMiddleware(compiler))
     app.use(webpackDevMiddleware(compiler, {
@@ -35,6 +36,9 @@ if ( isDev ) {
     })) 
 } else {
     var router = require('./dist/server')
+    app.set('views', path.join(__dirname, 'dist'))
+    app.set('view engine', 'ejs')
+    app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 0 }))
 }
 
 app.set('port', port)
@@ -45,7 +49,6 @@ app.use(function(err, req, res, next) {
     errorLog.write(meta + err.stack + '\n')
     next()
 })
-app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 0 }))
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use(cookieParser())
 app.use(session({

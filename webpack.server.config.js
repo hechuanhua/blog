@@ -16,10 +16,9 @@ fs.readdirSync('node_modules')
     })
 
 module.exports = [{
-    entry: { 
-        index: [
-            './src/client/index' 
-        ]
+    entry: {
+        vendor: ['react','redux','react-redux','react-router'],
+        bundle: './src/client'
     },
     output: {
         path: path.resolve(__dirname,  "./dist"), //静态资源会再这目录下
@@ -67,10 +66,20 @@ module.exports = [{
         // }]
     },
     plugins: [
-        // new HtmlWebpackPlugin({
-        //     filename: 'index.html',
-        //     template: './index.html'
-        // }),
+        new HtmlWebpackPlugin({
+            //favicon:path.join(__dirname,'../src/favicon.ico'),
+            title: "贺传华的个人网站",
+            template: path.join(__dirname,'./src/index.html'),
+            filename: 'index.ejs',
+            inject:'body',
+            html:'<%- __html__ %>',
+            initialData:'window.__INITIAL_STATE__ = <%- __state__ %>',
+            hash:false,    //为静态资源生成hash值
+            minify:{    //压缩HTML文件
+                removeComments:false,    //移除HTML中的注释
+                collapseWhitespace:false    //删除空白符与换行符
+            }
+        }),
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
         }),

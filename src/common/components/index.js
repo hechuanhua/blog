@@ -33,7 +33,7 @@ export class Index extends Component {
     //     console.log("Index==>componentDidUpdate666")
     // }
     render() {
-        console.log(this.props,'Index')
+        //console.log(this.props,'Index')
         var type = this.props.location.hash.match(/category=\d+/) ? 'category' : 'index'
         var categoryType = type == 'category'?this.props.location.hash.match(/category=\d+/).join('').match(/\d/)[0]:''
         //var category = location.hash.match(/category=\d+/) ? location.hash.match(/category=\d+/).join('').match(/\d/)[0] : ''

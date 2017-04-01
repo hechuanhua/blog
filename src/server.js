@@ -50,10 +50,6 @@ var uploadImg = multer({ storage: storage }).single('upload')
 
 if (!fsExistsSync(path.join(__dirname, '../dist'))) {
     fs.mkdir(path.join(__dirname, '../dist'))
-
-    if (!fsExistsSync(path.join(__dirname, '../dist/images'))) {
-        fs.mkdir(path.join(__dirname, '../dist/images'))
-    }
 }
 
 if (!fsExistsSync(path.join(__dirname, '../dist/images'))) {
@@ -71,9 +67,9 @@ function renderFullPage(html, initialState) {
             <body>
                 <div id="root">${html}</div>
                 <script>
-                  window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
+                    window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
                 </script>
-                <script src="/js/index.js"></script>
+                <script src="/js/vendor.js"></script><script src="/js/bundle.js"></script>
             </body>
         </html>
     `
@@ -104,7 +100,7 @@ function handleRender(req, res, next) {
                 res.set('Content-Type', 'text/html')
                 return res.status(200).send(renderFullPage(html, initialState))
             }else{
-                return res.status(200).send(renderFullPage(html, initialState))
+                //return res.status(200).send(renderFullPage(html, initialState))
                 return res.render('index', {__html__: html,__state__: JSON.stringify(initialState)})
 
             }
