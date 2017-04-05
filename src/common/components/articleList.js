@@ -5,9 +5,9 @@ import { Link, IndexLink } from 'react-router'
 import { hashHistory } from 'react-router'
 
 const ArticleItem = ({ data }) => {
-    return <li > < a href = { "/" + encodeURI(data.name) + "/" + encodeURI(data.time.day) + "/" + encodeURI(data.title) } >
+    return <li > <Link to =  {{pathname: "/" + encodeURI(data.name) + "/" + encodeURI(data.time.day) + "/" + encodeURI(data.title)}}  >
         < div className = "title" > { data.title } < /div>  < div className = "describe" > { data.content ? data.content.substr(0, 50) : "" }... < /div > 
-        < /a > 
+        < /Link > 
          < div className = "info" > 作者： { data.name }&nbsp;&nbsp;
             阅读量：{ data.pv } &nbsp;&nbsp;
             发布时间：{ data.time.minute }&nbsp;&nbsp;
