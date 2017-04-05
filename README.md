@@ -14,13 +14,13 @@ blog在线预览地址：http://www.hechuanhua.cn
 ### 运行
     git clone https://github.com/hechuanhua/blog.git
     npm install
-    npm install webpack babel babel-cli -g
+    npm install webpack babel babel-cli pm2 -g
     启动mongo：  ./mongoDb.sh
 
 
 ##### 开发环境
     npm start
-    浏览器输入 localhost:8080
+    浏览器输入 localhost:7070
 
 ##### 生产环境
     npm run dist(npm run dist_linux)
