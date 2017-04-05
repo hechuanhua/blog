@@ -7,7 +7,7 @@
     "start": "babel-node app.js",
     "dist": "set NODE_ENV=production&&webpack --config webpack.server.config.js --progress --colors&&node app.js",
     "dist_linux": "export NODE_ENV=production&&webpack --config webpack.server.config.js --progress --colors&&node app.js",
-    "pm2":"pm2 start app.js"
+    "pm2": "pm2 start app.js"
   },
   "author": "hechuanhua",
   "license": "MIT",
@@ -61,6 +61,7 @@
     "babel-register": "^6.3.13",
     "clean-webpack-plugin": "^0.1.9",
     "console-polyfill": "^0.2.3",
+    "copy-webpack-plugin": "^4.0.1",
     "css-loader": "^0.23.1",
     "es3ify-loader": "^0.2.0",
     "extract-text-webpack-plugin": "^1.0.1",

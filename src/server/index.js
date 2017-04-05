@@ -1,4 +1,3 @@
-
 var express = require('express')
 var fs = require('fs')
 var path = require('path')
@@ -14,14 +13,15 @@ import { combineReducers, createStore, applyMiddleware } from "redux"
 import { match, RouterContext} from 'react-router'
 import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
-import stores from './common/reducers/index'
-import rootRoute from './common/route'
+import stores from '../common/reducers/index'
+import rootRoute from '../common/route'
 
+//var host = require('./config')
 
 var storage = multer.diskStorage({
 
     destination: function(req, file, cb) {
-        cb(null, './dist/images')
+        cb(null, '../dist/images')
     },
     filename: function(req, file, cb) {
         var date = new Date(),
@@ -47,7 +47,7 @@ function renderFullPage(html, initialState) {
         <html>
             <head>
                 <title>我的个人网站</title>
-                <link href="http://www.hechuanhua.cn/index.3ec990c29dfbd2152ad7.css" rel="stylesheet"></head>
+                <link href="http://www.hechuanhua.cn/bundle.5e0dfe86a5eb1fd363c4.css" rel="stylesheet"></head>
             </head>
             <body>
                 <div id="root">${html}</div>
@@ -85,7 +85,7 @@ function handleRender(req, res, next) {
                 res.set('Content-Type', 'text/html')
                 return res.status(200).send(renderFullPage(html, initialState))
             }else{
-                //return res.status(200).send(renderFullPage(html, initialState))
+
                 return res.render('index', {__html__: html,__state__: JSON.stringify(initialState)})
 
             }

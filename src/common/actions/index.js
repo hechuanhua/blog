@@ -1,6 +1,6 @@
-
+var config = require('../../../config/index')
 import { hashHistory } from 'react-router'
-export const requestAPI = "http://localhost:8080/api/"
+export const requestAPI = "http://"+config.host+":"+config.port+"/api/"
 
     export const SwitchTab = (type, data) => {
         return {

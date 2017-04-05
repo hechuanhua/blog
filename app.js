@@ -11,6 +11,7 @@ var Server = require('mongodb').Server
 var Db = require('mongodb').Db
 var mongoDb = new Db('blog', new Server('localhost', 27017, { safe: true }))
 var app = express()
+var config = require('./config/index')
 
 var accessLog = fs.createWriteStream('access.log', { flags: 'a' })
 var errorLog = fs.createWriteStream('error.log', { flags: 'a' })
@@ -33,8 +34,7 @@ if (!fsExistsSync(path.join(__dirname, './dist/images'))) {
 }
 
 
-global.isDev = process.env.NODE_ENV == 'production' ? false : true
-var port = isDev ? '8080' : '8080'
+global.isDev = config.isDev
 
 if ( isDev ) {
     var webpack = require('webpack')
@@ -42,7 +42,7 @@ if ( isDev ) {
     var webpackHotMiddleware = require('webpack-hot-middleware')
     var WebpackConfig = require('./webpack.dev.config')
     var compiler = webpack(WebpackConfig)
-    var router = require('./src/server')
+    var router = require('./src/server/index')
     app.use(webpackHotMiddleware(compiler))
     app.use(webpackDevMiddleware(compiler, {
         publicPath: '',
@@ -57,7 +57,7 @@ if ( isDev ) {
     app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 0 }))
 }
 
-app.set('port', port)
+app.set('port', config.port)
 app.use(logger('short'))
 app.use(logger({ stream: accessLog }))
 app.use(function(err, req, res, next) {
@@ -72,9 +72,10 @@ app.use(session({
     key: 'blog', //字符串,用于指定用来保存session的cookie名称,默认为coomect.sid.
     cookie: { maxAge: 1000 * 60 * 60 * 24 * 5 },
     store: new mongoConnect({ //属性值为一个用来保存session数据的第三方存储对象
-        url: 'mongodb://localhost:27017/blog'
+        url: 'mongodb://'+config.mongoDbHost+':'+config.mongoDbPort+'/'+config.mongoDbName
     })
 }))
+
 app.all('*',router)
 app.listen(app.get('port'), function() {
     console.log('请打开浏览器localhost: ' + app.get('port'))
