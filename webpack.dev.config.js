@@ -8,7 +8,7 @@ var CommonsChunkPlugin = webpack.optimize.CommonsChunkPlugin;
 
 module.exports = {
     entry: {
-        vendor: ['react','redux','react-redux','react-router'],
+        vendor: ['react','redux','react-redux','react-router','redux-thunk','react-dom'],
         bundle: ['./src/client/index','webpack-hot-middleware/client']
     },
     output: {

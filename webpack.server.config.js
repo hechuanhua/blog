@@ -17,13 +17,13 @@ fs.readdirSync('node_modules')
 
 module.exports = [{
     entry: {
-        vendor: ['react','redux','react-redux','react-router'],
+        vendor: ['react','redux','react-redux','react-router','redux-thunk','react-dom'],
         bundle: './src/client'
     },
     output: {
         path: path.resolve(__dirname,  "./dist"), //静态资源会再这目录下
-        filename: "js/[name].js",
-        chunkFilename: "js/[name].js",
+        filename: "js/[name].[chunkHash:8].js",
+        chunkFilename: "js/[name].[chunkHash:8].js",
         publicPath: "/" //html里面的引用路径会变成这个
     },
     resolve: {
@@ -92,13 +92,14 @@ module.exports = [{
             }
         }),
         new webpack.optimize.OccurenceOrderPlugin(), //按引用频度来排序 ID，以便达到减少文件大小的效果
-        new ExtractTextPlugin('[name].[hash].css', {
+        new ExtractTextPlugin('css/[name].[hash:8].css', {
             allChunks: true
         }),
-        // new CommonsChunkPlugin({
-        //     name: 'common',
-        //     minChunks: Infinity
-        // }),
+        new CommonsChunkPlugin({
+            name: "vendor",
+            //filename:"vendor.js",
+            minChunks: Infinity //Infinity
+        }),
     ],
 
 },
