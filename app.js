@@ -31,7 +31,6 @@ if (!fsExistsSync(path.join(__dirname, './dist/images'))) {
 }
 
 global.config = config
-global.isDev = config.isDev
 
 if ( config.isDev ) {
     var webpack = require('webpack')
