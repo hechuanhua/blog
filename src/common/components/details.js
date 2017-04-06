@@ -55,7 +55,7 @@ export class DetailsComponent extends Component{
     render(){
         
         let data=this.props.details;
-        let img=data.upload?("<img src="+actions.requestAPI+data.upload+"></img>"):""
+        let img=data.upload?("<img src="+data.upload+"></img>"):""
         let messageItemTmp=[]
         
         if(data.comments){

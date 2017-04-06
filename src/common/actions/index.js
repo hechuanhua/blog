@@ -1,5 +1,5 @@
 var config = require('../../../config/index')
-import { hashHistory } from 'react-router'
+import { browserHistory } from 'react-router'
 export const requestAPI = "http://"+config.host+":"+config.port+"/api/"
 
     export const SwitchTab = (type, data) => {
@@ -81,7 +81,7 @@ export const requestAPI = "http://"+config.host+":"+config.port+"/api/"
             console.log(data)
             dispatch(loginTop("loginOut"))
             return _alertStore(dispatch, "退出成功", function() {
-                hashHistory.push('/')
+                browserHistory.push('/')
             })
         }).catch(function(e) {
             console.error(e)
@@ -126,11 +126,11 @@ export const requestAPI = "http://"+config.host+":"+config.port+"/api/"
                 console.log(data)
                 if (data.code === 1000) {
                     return _alertStore(dispatch, "留言成功", function() {
-                        hashHistory.goBack()
+                        browserHistory.goBack()
                     })
                 } else {
                     return _alertStore(dispatch, "留言失败", function() {
-                        hashHistory.goBack()
+                        browserHistory.goBack()
                     })
                 }
             })
@@ -221,7 +221,7 @@ export const requestAPI = "http://"+config.host+":"+config.port+"/api/"
                         let data = JSON.parse(xmlHttp.response)
                         if (data.code === 1000) {
                             _alertStore(dispatch, "发布成功", function() {
-                                hashHistory.push('/')
+                                browserHistory.push('/')
                             })
                         } else {
                             _alertStore(dispatch, data.messgage)

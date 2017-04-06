@@ -83,7 +83,7 @@ module.exports = [{
         new webpack.DefinePlugin({
             'process.env.NODE_ENV': JSON.stringify('production')
         }),
-        //new CleanPlugin(['dist/js']),
+        //new CleanPlugin(['dist']),
         new webpack.optimize.UglifyJsPlugin({
             compress: {
                 warnings: false,

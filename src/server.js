@@ -4,7 +4,7 @@ var path = require('path')
 var Server = require('mongodb').Server
 var multer = require('multer')
 var Db = require('mongodb').Db
-var mongoDb = new Db('blog', new Server('localhost', 27017, { safe: true }))
+var mongoDb = new Db(config.mongoDbName, new Server(config.mongoDbHost, config.mongoDbPort, { safe: true }))
 var router = express.Router()
 
 import React, { Component } from 'react'
@@ -13,15 +13,14 @@ import { combineReducers, createStore, applyMiddleware } from "redux"
 import { match, RouterContext} from 'react-router'
 import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
-import stores from '../common/reducers/index'
-import rootRoute from '../common/route'
+import stores from './common/reducers/index'
+import rootRoute from './common/route'
 
-//var host = require('./config')
 
 var storage = multer.diskStorage({
 
     destination: function(req, file, cb) {
-        cb(null, '../dist/images')
+        cb(null, './dist/images')
     },
     filename: function(req, file, cb) {
         var date = new Date(),
@@ -80,7 +79,7 @@ function handleRender(req, res, next) {
             )
             const initialState = store.getState()
 
-            if( isDev ){
+            if( config.isDev ){
 
                 res.set('Content-Type', 'text/html')
                 return res.status(200).send(renderFullPage(html, initialState))
@@ -109,8 +108,8 @@ router.all('*', function(req, res, next) {
 })
 
 router.get('*', function(req, res, next) {
-
-    if(req.url.indexOf('/api')>-1){
+    
+    if(req.url.indexOf('/api')>-1||req.url.indexOf('/images')>-1){
         next()
     }else{
         handleRender(req,res,next) 
@@ -119,7 +118,7 @@ router.get('*', function(req, res, next) {
 })
 
 router.get('/api/getUserInfo', function(req, res) {
-
+   
     if (req.session.user) {
         var info = { name: req.session.user.name }
         return res.json({ code: 1000, messgage: "已登录", info: info })
@@ -176,8 +175,9 @@ router.get('/api/loginout', function(req, res) {
 
 router.post('/api/publish', checkLogin)
 router.post('/api/publish', function(req, res) {
-
+    
     uploadImg(req, res, function(err) {
+        
         if (err) {
             return console.log(err)
         }

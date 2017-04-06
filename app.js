@@ -7,9 +7,6 @@ var mongoConnect = require('connect-mongo')(session)
 var multer = require('multer')
 var fs = require('fs')
 var logger = require('morgan')
-var Server = require('mongodb').Server
-var Db = require('mongodb').Db
-var mongoDb = new Db('blog', new Server('localhost', 27017, { safe: true }))
 var app = express()
 var config = require('./config/index')
 
@@ -33,16 +30,16 @@ if (!fsExistsSync(path.join(__dirname, './dist/images'))) {
     fs.mkdir(path.join(__dirname, './dist/images'))
 }
 
-
+global.config = config
 global.isDev = config.isDev
 
-if ( isDev ) {
+if ( config.isDev ) {
     var webpack = require('webpack')
     var webpackDevMiddleware = require('webpack-dev-middleware')
     var webpackHotMiddleware = require('webpack-hot-middleware')
     var WebpackConfig = require('./webpack.dev.config')
     var compiler = webpack(WebpackConfig)
-    var router = require('./src/server/index')
+    var router = require('./src/server')
     app.use(webpackHotMiddleware(compiler))
     app.use(webpackDevMiddleware(compiler, {
         publicPath: '',
@@ -54,9 +51,9 @@ if ( isDev ) {
     var router = require('./dist/server')
     app.set('views', path.join(__dirname, 'dist'))
     app.set('view engine', 'ejs')
-    app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 0 }))
 }
 
+app.use(express.static(path.join(__dirname, 'dist'), { maxAge: 0 }))
 app.set('port', config.port)
 app.use(logger('short'))
 app.use(logger({ stream: accessLog }))
