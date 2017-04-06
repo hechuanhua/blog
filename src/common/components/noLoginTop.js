@@ -10,7 +10,7 @@ class NoLoginTop extends Component{
     let props=this.props
     return <div className="welcome content">
               <span style={{float:"left",color:"red"}}>登录即可发布文章</span>
-              欢迎您访问我的个人网站  请
+              欢迎您访问  请
               <a href="javascript:;" onClick={(e)=>{this.props.actions.mobBoxData("loginShow")}}>登录</a>或
               <a href="javascript:;" onClick={(e)=>{this.props.actions.mobBoxData("regShow")}}>注册</a>
           </div>

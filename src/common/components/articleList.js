@@ -135,7 +135,7 @@ export class PageLi extends Component {
                 };
                 this.swtichPage(Number(pageCurrent) - 1) 
             } } >
-            < a className = "pageBtn" >上一页< /a>< /li> { pageTmp } 
+            < a className = "pageBtn" >上一页< /a>< /li>{ pageTmp }
             < li onClick = { () => {
                     if (pageCurrent >= len) { this._alert("已经是最后一页了"); return };
                     this.swtichPage(Number(pageCurrent) + 1) } } >

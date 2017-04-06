@@ -15,12 +15,12 @@ a{color: #333;text-decoration: none;outline: none;}
         a{padding: 0 5px;color: #45a7ff;}
     }
 }
-.content{width:1120px;margin:0 auto}
+.content{max-width:1120px;margin:0 auto;width: 100%;padding: 0 10px;}
 .logo{ height: 100px; line-height: 100px; 
     a{font-size: 30px; color: #45a7ff; display:inline-block;}
 }
 .navBox { height: 40px; line-height: 40px; background: #45a7ff; }
-.nav {
+.nav {overflow: hidden;display: flex;
     li { float: left; width: 100px; text-align: center;  }
     li a { display: block; color: #fff; }
     li a.active{background: #2c73cd;}  
@@ -123,4 +123,8 @@ span.author { font-weight: 700; font-size: 18px; text-decoration: underline; }
         -ms-transform: scale(1);
         transform: scale(1)
     }
+}
+@media screen and (max-width: 460px) {
+    .searchForm { display: none;}
+    .nav li a{font-size: 12px;}
 }

@@ -46,7 +46,7 @@ function renderFullPage(html, initialState) {
         <html>
             <head>
                 <title>我的个人网站</title>
-                <link href="http://www.hechuanhua.cn/bundle.5e0dfe86a5eb1fd363c4.css" rel="stylesheet"></head>
+                <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=0">
             </head>
             <body>
                 <div id="root">${html}</div>
@@ -88,8 +88,6 @@ function handleRender(req, res, next) {
                 return res.render('index', {__html__: html,__state__: JSON.stringify(initialState)})
 
             }
-
-            
 
         } else {
             res.status(404).end('Not found');

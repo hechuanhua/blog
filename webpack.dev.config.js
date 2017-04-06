@@ -34,13 +34,13 @@ module.exports = {
         }, {
             test: /\.css$/,
             exclude: /node_modules/,
-            /*loader: "style!css!less",*/
-            loader: ExtractTextPlugin.extract('style', 'css')
+            loader: "style!css",
+            //loader: ExtractTextPlugin.extract('style', 'css')
         }, {
             test: /\.less$/,
             exclude: /node_modules/,
-            /*loader: "style!css!less",*/
-            loader: ExtractTextPlugin.extract('style', 'css!less')
+            loader: "style!css!less",
+            //loader: ExtractTextPlugin.extract('style', 'css!less')
         }, {
             test: /\.(png|jpg|jpeg|gif)$/,
             exclude: /node_modules/,
@@ -57,9 +57,9 @@ module.exports = {
         // }]
     },
     plugins: [
-        new ExtractTextPlugin('[name].css', {
-            allChunks: true
-        }),
+        // new ExtractTextPlugin('[name].css', {
+        //     allChunks: true
+        // }),
         new webpack.HotModuleReplacementPlugin(),
         new webpack.NoErrorsPlugin(),
         // new HtmlWebpackPlugin({
