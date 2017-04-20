@@ -54,6 +54,7 @@ function renderFullPage(html, initialState) {
                     window.__INITIAL_STATE__ = ${JSON.stringify(initialState)}
                 </script>
                 <script src="/js/vendor.js"></script><script src="/js/bundle.js"></script>
+                
             </body>
         </html>
     `
@@ -107,7 +108,7 @@ function handleRender(req, res, next) {
 
 router.get('*', function(req, res, next) {
     
-    if(req.url.indexOf('/api')>-1||req.url.indexOf('/images')>-1||req.url.indexOf('favicon.ico')>-1){
+    if(req.url.indexOf('/api')>-1||req.url.indexOf('/images')>-1||req.url.indexOf('favicon.ico')>-1||req.url.indexOf('.js')>-1){
         next()
     }else{
         handleRender(req,res,next) 
