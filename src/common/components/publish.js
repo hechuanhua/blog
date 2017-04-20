@@ -10,11 +10,11 @@ var hljs = require('highlight.js')
 var renderer = new marked.Renderer()
 
 
-if(typeof window !== undefined){
-    window.onload = function(){
+if(typeof window != 'undefined'){
+    console.log(window)
+    window.onload=function(){
         hljs.initHighlightingOnLoad()
     }
-    
 }
 
 renderer.code = function(code, lang) {
