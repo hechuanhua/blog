@@ -5,6 +5,39 @@ import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../actions/index'
 
+var marked = require('marked')
+var hljs = require('highlight.js')
+var renderer = new marked.Renderer()
+
+
+if(typeof window !== undefined){
+    window.onload = function(){
+        hljs.initHighlightingOnLoad()
+    }
+    
+}
+
+renderer.code = function(code, lang) {
+    var language = lang && (' language-' + lang) || ''
+    return '<pre class="prettyprint' + language + '">'
+    + '<code class="hljs javascript">' + hljs.highlightAuto(code).value; + '</code>'
+    + '</pre>'
+}
+
+marked.setOptions({
+    renderer: renderer,
+    gfm: true,
+    tables: true,
+    breaks: true,
+    pedantic: false,
+    sanitize: false,
+    smartLists: true,
+    smartypants: false,
+    highlight: function (code) {
+        return hljs.highlightAuto(code).value
+    }
+})
+
 export class PublishComponent extends Component{
     constructor(props) {
         super(props)
@@ -13,7 +46,10 @@ export class PublishComponent extends Component{
         this.file
         this.form
         this.category
+        this.message1Value = '' 
+        this.state = { message1Value: '' }
     }
+
     handleSubmit(){
         //let data="title="+this.title.value+"&content="+this.content.value+"&upload="+this.file.value
         let _alert=this.props.actions._alert,
@@ -40,6 +76,25 @@ export class PublishComponent extends Component{
       let data=new FormData(this.form);
       this.props.actions.publishSubmit(data)
     }
+    textareaChange(e){
+        this.setState({
+            message1Value : marked(e.target.value)
+        })
+    }
+    deyDowntab(event){
+        if (event.keyCode == 9) {
+            event.preventDefault();
+            var indent = '    ';
+            var start = this.content.selectionStart;
+            var end = this.content.selectionEnd;
+            var selected = window.getSelection().toString();
+            selected = indent + selected.replace(/\n/g, '\n' + indent);
+            this.content.value = this.content.value.substring(0, start) + selected
+                    + this.content.value.substring(end);
+            this.content.setSelectionRange(start + indent.length, start
+                    + selected.length);
+        }
+    }
     render(){
         return <form className="publish" ref={el=>{this.form=el}} >
             <div className="publishItem">
@@ -51,8 +106,12 @@ export class PublishComponent extends Component{
             <div className="publishItem">
                 <div className="name">文章内容：</div>
                 <div className="inputDiv">
-                    <textarea placeholder="请输入文章内容" ref={el=>{this.content=el}} rows="10" name="content"  placeholder="最少20个字"></textarea>
+                    <textarea placeholder="请输入文章内容" ref={el=>{this.content=el}} rows="10" name="content"  placeholder="最少20个字,支持markdown写法" onChange={(event)=>{this.textareaChange(event)}} onKeyDown={(event)=>{this.deyDowntab(event)}}></textarea>
                 </div>
+            </div>
+            <div className="publishItem">
+                <div className="name">预览区：</div>
+                <div className="inputDiv" dangerouslySetInnerHTML={{__html:this.state.message1Value}} style={{height:'100px'}}></div>
             </div>
             <div className="publishItem">
                 <div className="name">上传封面：</div>

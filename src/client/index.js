@@ -29,6 +29,7 @@ import TipsBox from '../common/containers/tipsBox'
 import route from '../common/route'
 
 import "../less/style.less"
+import "../less/monokai_sublime.min.css"
 import '../form/css/form.css'
 
 

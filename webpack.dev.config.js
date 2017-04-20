@@ -71,6 +71,7 @@ module.exports = {
             'process.env.NODE_ENV': JSON.stringify('development')
         }),
     ],
+    devtool: 'source-map'
     // devServer: {
     //     port: 7070,
     //     hot: true,

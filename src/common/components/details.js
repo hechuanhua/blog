@@ -4,7 +4,21 @@ import { render } from 'react-dom'
 import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../actions/index'
+var marked = require('marked')
 
+// marked.setOptions({
+//     renderer: new marked.Renderer(),
+//     gfm: true,
+//     tables: true,
+//     breaks: false,
+//     pedantic: false,
+//     sanitize: false,
+//     smartLists: true,
+//     smartypants: false,
+//     highlight: function (code) {
+//     return highlight.highlightAuto(code).value;
+//   }
+// });
 const MessageItem=({data})=>{
   return <div className="messageItem">
             <div className="messageAuthor"><span className="author">{data.name}：说</span></div>
@@ -57,7 +71,10 @@ export class DetailsComponent extends Component{
         let data=this.props.details;
         let img=data.upload?("<img src="+data.upload+"></img>"):""
         let messageItemTmp=[]
-        
+        data.content = data.content || ''
+        console.log(data.content,1)
+        data.content = marked(data.content)
+        console.log(data.content,2)
         if(data.comments){
             for(let len=data.comments.length,i=len-1;i>=0;i--){
                 messageItemTmp.push(<MessageItem key={i} data={data.comments[i]}/>)
