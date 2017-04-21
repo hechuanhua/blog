@@ -15,13 +15,24 @@ const host = 'localhost'
 const isDev = process.env.NODE_ENV == 'production' ? false : true
 const port = isDev ? '7070' : '8080'
 
+if(process.env.NODE_ENV == 'hechuanhua' ){
+	const requestAPI = "http://"+config.host+":"+config.port+"/api/"
+}else{
+	const requestAPI = "http://"+config.host+"/api/"
+}
+
+
 var config = {
     mongoDbHost : mongoDbHost,
     mongoDbPort : mongoDbPort,
     mongoDbName : mongoDbName,
     isDev : isDev,
     host : host,
-    port : port
+    port : port,
+    requestAPI:requestAPI
 }
+
+
+
 //export default host
 module.exports = config

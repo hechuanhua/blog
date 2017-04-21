@@ -1,1 +1,1 @@
-D:/MongoDb/bin/mongod.exe --dbpath="D:/MongoDb/blog" 
+/Users/hechuanhua/soft/mongodb/bin/mongod --dbpath /Users/hechuanhua/soft/mongodb/blog

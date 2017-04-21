@@ -1,6 +1,7 @@
 var config = require('../../../config/index')
 import { browserHistory } from 'react-router'
-export const requestAPI = "http://"+config.host+":"+config.port+"/api/"
+
+export const requestAPI = config.requestAPI
 
     export const SwitchTab = (type, data) => {
         return {

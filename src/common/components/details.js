@@ -72,9 +72,9 @@ export class DetailsComponent extends Component{
         let img=data.upload?("<img src="+data.upload+"></img>"):""
         let messageItemTmp=[]
         data.content = data.content || ''
-        console.log(data.content,1)
+        //console.log(data.content,1)
         data.content = marked(data.content)
-        console.log(data.content,2)
+        //console.log(data.content,2)
         if(data.comments){
             for(let len=data.comments.length,i=len-1;i>=0;i--){
                 messageItemTmp.push(<MessageItem key={i} data={data.comments[i]}/>)

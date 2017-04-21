@@ -96,14 +96,14 @@ function handleRender(req, res, next) {
     })
 }
 
-// router.all('*', function(req, res, next) {
+router.all('*', function(req, res, next) {
 
-//     res.header('Access-Control-Allow-Origin', 'http://localhost:7070')
-//     res.header('Access-Control-Allow-Headers', 'Content-Type=application/jsoncharset=UTF-8')
-//     res.header('Access-Control-Allow-Credentials', true) //支持跨域传cookie
-//     next()
+    res.header('Access-Control-Allow-Origin', 'http://'+config.host)
+    res.header('Access-Control-Allow-Headers', 'Content-Type=application/jsoncharset=UTF-8')
+    res.header('Access-Control-Allow-Credentials', true) //支持跨域传cookie
+    next()
 
-// })
+})
 
 router.get('*', function(req, res, next) {
     
