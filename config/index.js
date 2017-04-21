@@ -15,10 +15,12 @@ const host = 'localhost'
 const isDev = process.env.NODE_ENV == 'production' ? false : true
 const port = isDev ? '7070' : '8080'
 
+/*API地址*/
+let requestAPI
 if(process.env.NODE_ENV == 'hechuanhua' ){
-	const requestAPI = "http://"+config.host+":"+config.port+"/api/"
+	requestAPI = "http://"+host+"/api/"
 }else{
-	const requestAPI = "http://"+config.host+"/api/"
+	requestAPI = "http://"+host+":"+port+"/api/"
 }
 
 
