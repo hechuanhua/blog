@@ -10,7 +10,7 @@ import thunkMiddleware from 'redux-thunk'
 /*切换菜单栏*/
 const switchNews = (state = [], action) => {
   switch (action.type) {
-    case 'containers':
+    case 'ARTICLELIST':
       return action.data
     default:
       return state
@@ -378,14 +378,14 @@ const ModalBoxData=(state=[],action)=>{
 })
 export default stores */
 
-
 const stores = combineReducers({//合成reducers
-  nav:isLogin,
-  container:switchNews,
+  userInfo:isLogin,
+  articlelist:switchNews,
   mobBoxData:mobBoxData,
   tips:tips,
   data:addState,
   ModalBoxIsNone:ModalBoxIsNone,
   ModalBoxData:ModalBoxData
 })
+
 export default stores

@@ -12,9 +12,9 @@ var config = require('./config/index')
 
 var accessLog = fs.createWriteStream('access.log', { flags: 'a' })
 var errorLog = fs.createWriteStream('error.log', { flags: 'a' })
+  
 
 function fsExistsSync(path) {
-    
     try {
         fs.accessSync(path, fs.F_OK)
     } catch (e) {

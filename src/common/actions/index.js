@@ -4,8 +4,9 @@ import { browserHistory } from 'react-router'
 export const requestAPI = config.requestAPI
 
     export const SwitchTab = (type, data) => {
+
         return {
-            type: "containers",
+            type: "ARTICLELIST",
             data
         }
     }
@@ -167,10 +168,12 @@ export const requestAPI = config.requestAPI
     @type 列表or文章详情
     @params 如果有代表文章页码切换
     */
-    export const ajaxData = (type, params) => {
+    export const ajaxData = (type,params) => {
         console.log(type,params)
         return (dispatch, getState) => {
+            
             var name = ""
+            //type = 'index',params=''
             switch (type) {
                 case "index":
                     if (params) { name = "newsList?page=" + params } else { name = "newsList" };
@@ -182,6 +185,7 @@ export const requestAPI = config.requestAPI
                     if (params) { name = "search?keyword="+params.keyword+( params.page?"&page=" + params.page:"" )}
                     break;
                 case "details":
+
                     name = "a/" + encodeURI(params.name) + "/" + params.date + "/" + encodeURI(params.title);
                     break;
                 case "about":
@@ -190,21 +194,25 @@ export const requestAPI = config.requestAPI
                 default:
                     return {};
             }
-            fetch(requestAPI + name, {
+            
+            return fetch(requestAPI + name, {
                 credentials: 'include'
             })
             .then(function(response) {
-                return response.json();
+                console.log(444)
+                return response.json()
             })
             .then(function(data) {
                 
-                return dispatch(SwitchTab(type, data))
+                console.log(data,'data')
+                //return resolve({data:data,type:SwitchTab(type, data)})
+                dispatch(SwitchTab(type, data))
             })
             .catch(function(e) {
-                console.error(e);
+                console.error(e)
             });
-
         }
+
     }
     /*发布作品请求
     @data 发布作品的数据
@@ -319,25 +327,25 @@ export const requestAPI = config.requestAPI
 
     /*获取用户登录信息*/
     export const getUserInfo = () => {
-        return (dispatch) => {
-            fetch(requestAPI + "getUserInfo", {
-                credentials: 'include'
-            })
-            .then(function(response) {
-                return response.json();
-            })
-            .then(function(data) {
-                console.log(data);
-                if (data.code === 1000) { //已登录
-                    return dispatch(loginTop("loginIn", data))
-                }
-                if (data.code === 1001) {
-                    return dispatch(loginTop("loginOut", data))
-                }
-            })
-            .catch(function(e) {
-                console.error(e);
-            });
+        return (dispatch, getState) => {
+            return fetch(requestAPI + "getUserInfo", {
+                    credentials: 'include'
+                })
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(data) {
+                    console.log(data);
+                    if (data.code === 1000) { //已登录
+                        return dispatch(loginTop("loginIn", data))
+                    }
+                    if (data.code === 1001) {
+                        return dispatch(loginTop("loginOut", data))
+                    }
+                })
+                .catch(function(e) {
+                    console.error(e);
+                });
         }
     }
     /*修改关于网站的信息

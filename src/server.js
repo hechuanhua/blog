@@ -15,6 +15,7 @@ import { Provider } from 'react-redux'
 import thunkMiddleware from 'redux-thunk'
 import stores from './common/reducers/index'
 import rootRoute from './common/route'
+import * as action from './common/actions'
 
 
 var storage = multer.diskStorage({
@@ -58,6 +59,17 @@ function renderFullPage(html, initialState) {
         </html>
     `
 }
+// async function fetchAllData(dispatch, components, params) {
+//         const needs = components
+//             .filter(x=>x.ajaxData)
+//             .reduce((prev,current)=>{
+//                 return current.ajaxData(params).concat(prev)
+//             },[])
+//             .map(x=>{
+//                 return dispatch(x)
+//             })
+//         return await Promise.all(needs)
+//     }
 
 function handleRender(req, res, next) {
     
@@ -72,22 +84,36 @@ function handleRender(req, res, next) {
            res.status(500).end('Internal Server Error');
         } else if (renderProps) {
 
-            const html = renderToString(
-                <Provider store={store} >
-                  <RouterContext {...renderProps} />
-                </Provider>
-            )
-            const initialState = store.getState()
+            let ajaxData = renderProps.components
+                .filter(x=>x.ajaxData)
+                .reduce((prev,current)=>{
+                    return current.ajaxData(renderProps).concat(prev)
+                },[])
+                .map(x=>{
+                    return store.dispatch(x)
+                })
+               
+            Promise.all(ajaxData)
+            .then(function(data){
 
-            if( config.isDev ){
+                const html = renderToString(
+                    <Provider store={store} >
+                      <RouterContext {...renderProps} />
+                    </Provider>
+                )
+                const initialState = store.getState()
 
-                res.set('Content-Type', 'text/html')
-                return res.status(200).send(renderFullPage(html, initialState))
-            }else{
+                if( config.isDev ){
+                    res.set('Content-Type', 'text/html')
+                    return res.status(200).send(renderFullPage(html, initialState))
+                }else{
+                    return res.render('index', {__html__: html,__state__: JSON.stringify(initialState)})
+                }
 
-                return res.render('index', {__html__: html,__state__: JSON.stringify(initialState)})
-
-            }
+            })
+            .catch(function(e) {
+                console.error(e);
+            });
 
         } else {
             res.status(404).end('Not found');
@@ -96,15 +122,21 @@ function handleRender(req, res, next) {
     })
 }
 
-router.all('*', function(req, res, next) {
+let reqUser = {}
 
-    res.header('Access-Control-Allow-Origin', 'http://'+config.host)
+router.all('*', function(req, res, next) {
+    
+    res.header('Access-Control-Allow-Origin', 'http://localhost:7070')
     res.header('Access-Control-Allow-Headers', 'Content-Type=application/jsoncharset=UTF-8')
     res.header('Access-Control-Allow-Credentials', true) //支持跨域传cookie
     next()
 
 })
-
+router.get('/', function(req, res, next) {
+    
+    reqUser = req.session.user
+    next()
+})
 router.get('*', function(req, res, next) {
     
     if(req.url.indexOf('/api')>-1||req.url.indexOf('/images')>-1||req.url.indexOf('favicon.ico')>-1){
@@ -115,10 +147,12 @@ router.get('*', function(req, res, next) {
 
 })
 
+
+
 router.get('/api/getUserInfo', function(req, res) {
-   
-    if (req.session.user) {
-        var info = { name: req.session.user.name }
+    console.log(reqUser,'reqUser')
+    if (reqUser) {
+        var info = { name: reqUser.name }
         return res.json({ code: 1000, messgage: "已登录", info: info })
     } else {
         return res.json({ code: 1001, messgage: "未登录" })
@@ -138,6 +172,7 @@ router.post('/api/login', function(req, res) {
             if (user.password == newUser.password) {
                 req.session.user = user
                 var info = { name: newUser.name }
+                //reqUser = req.session.user
                 res.end(JSON.stringify({ code: 1000, messgage: "登录成功", info: info }))
             } else {
                 res.end(JSON.stringify({ code: 1001, messgage: "密码错误" }))
@@ -167,6 +202,7 @@ router.post('/api/reg', function(req, res) {
 })
 
 router.get('/api/loginout', function(req, res) {
+    reqUser = null
     req.session.user = null
     return res.json({ code: 1000, messgage: "退出成功" })
 })
@@ -184,7 +220,7 @@ router.post('/api/publish', function(req, res) {
                 return res.json({ code: 1002, messgage: "标题已存在" })
             }
             var newUpload = new Upload({
-                name: req.session.user.name,
+                name: reqUser.name,
                 title: req.body.title,
                 content: req.body.content,
                 upload: req.file ? "/images/" + req.file.filename : "",
@@ -250,9 +286,11 @@ router.post('/api/a/:name/:day/:title', function(req, res) {
 })
 
 router.get('/api/search', function(req, res) {
-
+    var keywords = ''
     var keyword = req.query.keyword
+
     if (keyword) {
+
         keywords = req.query
         Search(keywords, function(doc, page) {
             var searchData = {}
@@ -266,10 +304,10 @@ router.get('/api/search', function(req, res) {
 
 router.post('/api/about', function(req, res) {
 
-    if (!req.session.user) {
+    if (!reqUser) {
         return res.json({ code: 1001, messgage: "请先登录" })
     }
-    if (req.session.user.name !== "贺传华") {
+    if (reqUser.name !== "贺传华") {
         return res.json({ code: 1001, messgage: "你不是管理员，无法修改" })
     }
     
@@ -295,7 +333,7 @@ router.get('/api/about', function(req, res) {
 
 function checkLogin(req, res, next) {
 
-    if (!req.session.user) {
+    if (!reqUser) {
         return res.json({ code: 1009, messgage: "您还未登录,请先登录" })
     }
     next()
@@ -304,7 +342,7 @@ function checkLogin(req, res, next) {
 
 function checkNotLogin(req, res, next) {
 
-    if (req.session.user) {
+    if (reqUser) {
         return res.json({ code: 1000, messgage: "您已登录,不需重新登录" })
     }
     next()
@@ -424,6 +462,7 @@ Upload.getTitle = function(title, callback) {
  * return 返回搜索结果和统计条数以及一次查询几条
  */
 function Search(keywords, callback) {
+    
     var keyword = keywords.keyword,
         limit = {},
         page = keywords.page || 1

@@ -14,8 +14,8 @@ export class TipsBox extends Component {
     render() {
         return <div className = "tipsBox" style = {{ "display": this.props.tips.messgage ? "block" : "none" } } >
             <div className = "tipsBg" > </div>
-            < div className = "main" >
-            < span className = "text"> { this.props.tips.messgage } < /span> < /div> < /div> 
+            <div className = "main" >
+            <span className = "text"> { this.props.tips.messgage } </span> </div> </div> 
     }
 }
 

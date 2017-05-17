@@ -18,13 +18,13 @@ import { render } from 'react-dom'
 import thunkMiddleware from 'redux-thunk'
 import { Provider, connect } from 'react-redux'
 import { combineReducers, createStore, applyMiddleware } from "redux"
-import { Router, Route, IndexRoute, Link, IndexLink, browserHistory, hashHistory, match } from 'react-router'
+import { Router, Route, IndexRoute, Link, IndexLink, browserHistory } from 'react-router'
 import * as actions from '../common/actions/index'
 
 import stores from '../common/reducers/index'
 import Index from '../common/components/index'
 import MobBox from '../common/containers/mobBox'
-import Nav from '../common/containers/nav'
+import Header from '../common/containers/header'
 import TipsBox from '../common/containers/tipsBox'
 import route from '../common/route'
 
@@ -33,8 +33,11 @@ import "../less/monokai_sublime.min.css"
 import '../form/css/form.css'
 
 
+let initState = window.__INITIAL_STATE__
+
 let store = createStore(
     stores,
+    initState,
     applyMiddleware(thunkMiddleware)
 )
 

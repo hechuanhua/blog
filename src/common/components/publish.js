@@ -11,7 +11,6 @@ var renderer = new marked.Renderer()
 
 
 if(typeof window != 'undefined'){
-    console.log(window)
     window.onload=function(){
         hljs.initHighlightingOnLoad()
     }
@@ -81,7 +80,7 @@ export class PublishComponent extends Component{
             message1Value : marked(e.target.value)
         })
     }
-    deyDowntab(event){
+    keyDowntab(event){
         if (event.keyCode == 9) {
             event.preventDefault();
             var indent = '    ';
@@ -106,12 +105,12 @@ export class PublishComponent extends Component{
             <div className="publishItem">
                 <div className="name">文章内容：</div>
                 <div className="inputDiv">
-                    <textarea placeholder="请输入文章内容" ref={el=>{this.content=el}} rows="10" name="content"  placeholder="最少20个字,支持markdown写法" onChange={(event)=>{this.textareaChange(event)}} onKeyDown={(event)=>{this.deyDowntab(event)}}></textarea>
+                    <textarea placeholder="请输入文章内容" ref={el=>{this.content=el}} rows="10" name="content"  placeholder="最少20个字,支持markdown写法" onChange={(event)=>{this.textareaChange(event)}} onKeyDown={(event)=>{this.keyDowntab(event)}}></textarea>
                 </div>
             </div>
             <div className="publishItem">
                 <div className="name">预览区：</div>
-                <div className="inputDiv" dangerouslySetInnerHTML={{__html:this.state.message1Value}} style={{height:'100px'}}></div>
+                <div className="inputDiv" dangerouslySetInnerHTML={{__html:this.state.message1Value}} style={{minHeight:'100px',maxHeight:'250px','overflowY':'auto'}}></div>
             </div>
             <div className="publishItem">
                 <div className="name">上传封面：</div>
@@ -133,16 +132,16 @@ export class PublishComponent extends Component{
     }
 }
 
-const mapStateToProps=(state)=>{
-    return {publish:state.container}
-}
+// const mapStateToProps=(state)=>{
+//     return {publish:state.container}
+// }
 const mapDispatchToProps=(dispatch)=>{
     return {
         actions: bindActionCreators(actions, dispatch),
     }
 }
 const Publish= connect(
-    mapStateToProps,
+    '',
     mapDispatchToProps
 )(PublishComponent)
 

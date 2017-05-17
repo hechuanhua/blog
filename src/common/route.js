@@ -24,7 +24,7 @@ import * as actions from '../common/actions/index'
 import stores from '../common/reducers/index'
 import Index from '../common/components/index'
 import MobBox from '../common/containers/mobBox'
-import Nav from '../common/containers/nav'
+import Header from '../common/containers/header'
 import TipsBox from '../common/containers/tipsBox'
 //import Footer from '../common/containers/footer'
 
@@ -40,6 +40,9 @@ class App extends Component {
     constructor(props) {
         super(props)
     }
+    static ajaxData(){
+        return [actions.getUserInfo()]
+    }
     componentDidMount() {
         let WinH = document.documentElement.clientHeight
         let wrap = document.querySelector('.container')
@@ -47,7 +50,7 @@ class App extends Component {
     }
     render(){
         return <div className="page">
-            <Nav/>
+            <Header/>
             <div className="navBox">
                 <ul className="nav content">
                     <li><IndexLink to="/" activeClassName="active">首页</IndexLink></li>

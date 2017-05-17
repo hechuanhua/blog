@@ -6,17 +6,26 @@ import * as actions from '../actions/index'
 import { ArticleList,PageLi } from './articleList'
 
 export class SearchComponent extends Component {
+
+    static ajaxData(props){
+        
+        let keyword = props.location.query.keyword
+        return [actions.ajaxData('search', { 'keyword': keyword })]
+        
+    }
+
     render() {
-        let data = this.props.search;
+
+        let data = this.props.search
         return <div className = "search">
-            <ArticleList articleList = { data.data } ajaxData = { this.props.actions.ajaxData } type = "search" query = { this.props.location.query } /> 
-            <PageLi pageList = { data.page } ajaxData = { this.props.actions.ajaxData } type = "search" query = { this.props.location.query } actions = {this.props.actions} />
+            <ArticleList articleList = { data.data } type = "search" query = { this.props.location.query } actions = {this.props.actions} /> 
+            <PageLi pageList = { data.page }  type = "search" query = { this.props.location.query } actions = {this.props.actions} />
             </div>
     }
 }
 
 const mapStateToProps = (state) => {
-    return { search: state.container }
+    return { search: state.articlelist }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
@@ -27,4 +36,5 @@ const Search = connect(
     mapStateToProps, 
     mapDispatchToProps 
 )(SearchComponent)
+
 module.exports = Search

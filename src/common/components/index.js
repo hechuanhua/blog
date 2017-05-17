@@ -7,52 +7,55 @@ import { ArticleList, PageLi } from './articleList'
 
 
 export class Index extends Component {
-    // constructor(props) {
-    //     super(props)
-    // }
-    // componentWillMount() {
-    //     console.log("Index==>componentWillMount111")
-    //     console.log(this.props,999)
-    //     //this.props.actions.ajaxData("index")
-    // }
-    // componentDidMount() {
-    //     console.log("Index==>componentDidMount222")
-    // }
-    // componentWillReceiveProps() {
-    //     console.log("Index==>componentWillReceiveProps333,收到新的参数",this.props)
-    //     //this.props.actions.ajaxData("index", this.props.query.page)
-    // }
-    // shouldComponentUpdate(nextProps,nextState){
-    //   console.log("shouldComponentUpdate444，是否需要重新渲染",this.props.index,nextProps.index,this.props,nextProps)
-    //   return true
-    // }
-    // componentWillUpdate() {
-    //     console.log("Index==>componentWillUpdate555")
-    // }
-    // componentDidUpdate() {
-    //     console.log("Index==>componentDidUpdate666")
-    // }
+
+    constructor(props) {
+        super(props)
+    }
+
+    static ajaxData (props) {
+
+        let page = props.location.query.page,
+            type = props.location.query.category?'category':'index'
+
+        if( type == 'category' ){
+            let params = { 'category' : props.location.query.category || 1, 'page' : page}
+            return [actions.ajaxData(type,params)]
+        } else {
+            return [actions.ajaxData(type,page)]
+        }
+
+    }
+
+    componentDidMount() {
+        
+        if ( this.props.articlelist.page&&this.props.articlelist.page.count ) {
+
+        } else {
+            let page = this.props.location.query.page
+            this.props.actions.ajaxData('index',page)
+        }
+        
+    }
+
     render() {
-        //console.log(this.props,'Index')
-        var type = this.props.location.hash.match(/category=\d+/) ? 'category' : 'index'
-        var categoryType = type == 'category'?this.props.location.hash.match(/category=\d+/).join('').match(/\d/)[0]:''
-        //var category = location.hash.match(/category=\d+/) ? location.hash.match(/category=\d+/).join('').match(/\d/)[0] : ''
-        let data = this.props.index;
-        return <div className = "index" >
-            < ArticleList articleList = { data.data } ajaxData = { this.props.actions.ajaxData } type = { type } query = { this.props.location.query } /> 
-            < PageLi pageList = { data.page } ajaxData = { this.props.actions.ajaxData } type = { type } query = { this.props.location.query } actions = { this.props.actions } categoryType = { categoryType }/> < /div>
+        let data = this.props.articlelist,
+            type = this.props.location.query.category?'category':'index'
+        return <div className = "index">
+            <ArticleList articleList = { data.data }  query = {this.props.location.query}  actions = { this.props.actions } type={ type }/> 
+            <PageLi pageList = { data.page }  query = {this.props.location.query} actions = { this.props.actions } type={ type }/> </div>
     }
 }
 
 const mapStateToProps = (state) => {
-    return { index: state.container, nav: state.nav }
+    return { articlelist: state.articlelist }
 }
 const mapDispatchToProps = (dispatch) => {
     return {
         actions: bindActionCreators(actions, dispatch),
     }
 }
+
 export default connect(
-    mapStateToProps, //只要 Redux store 发生改变，mapStateToProps 函数就会被调用。该回调函数必须返回一个纯对象，这个对象会与组件的 props 合并,如果你省略了这个参数，你的组件将不会监听 Redux store。如果指定了该回调函数中的第二个参数 ownProps，则该参数的值为传递到组件的 props，而且只要组件接收到新的 props，mapStateToProps 也会被调用
-    mapDispatchToProps //如果传递的是一个对象，那么每个定义在该对象的函数都将被当作 Redux action creator，而且这个对象会与 Redux store 绑定在一起，其中所定义的方法名将作为属性名，合并到组件的 props 中。如果传递的是一个函数，该函数将接收一个 dispatch 函数，然后由你来决定如何返回一个对象，这个对象通过 dispatch 函数与 action creator 以某种方式绑定在一起（提示：你也许会用到 Redux 的辅助函数 bindActionCreators()）。如果你省略这个 mapDispatchToProps 参数，默认情况下，dispatch 会注入到你的组件 props 中。如果指定了该回调函数中第二个参数 ownProps，该参数的值为传递到组件的 props，而且只要组件接收到新 props，mapDispatchToProps 也会被调用。
+    mapStateToProps, 
+    mapDispatchToProps 
 )(Index)

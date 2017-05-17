@@ -32,13 +32,18 @@ export class DetailsComponent extends Component{
         this.nameVlue = ''
         this.emailValue = ''    
     }
-
-    componentWillMount() {
-        this.props.actions.ajaxData("details", this.props.params)
+    static ajaxData(props){
+        return [actions.ajaxData("details",props.params)]
     }
+
     componentDidMount(){
         this.nameVlue = window.localStorage['commentInfo']?JSON.parse(window.localStorage['commentInfo']).name:''
         this.emailValue = window.localStorage['commentInfo']?JSON.parse(window.localStorage['commentInfo']).email:''
+        if( this.props.details&&this.props.details._id ){
+            
+        }else{
+            this.props.actions.ajaxData("details",this.props.params)
+        }
     }
     changeValue(e,type){
         if(type == 'name'){
@@ -67,7 +72,6 @@ export class DetailsComponent extends Component{
     }
 
     render(){
-        
         let data=this.props.details;
         let img=data.upload?("<img src="+data.upload+"></img>"):""
         let messageItemTmp=[]
@@ -122,7 +126,7 @@ export class DetailsComponent extends Component{
 }
 
 const mapStateToProps=(state)=>{
-    return {details:state.container}
+    return {details:state.articlelist}
 }
 const mapDispatchToProps=(dispatch)=>{
     return {

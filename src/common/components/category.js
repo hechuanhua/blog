@@ -15,16 +15,16 @@ export class CategoryComponent extends Component {
     }
 }
 
-const mapStateToProps = (state) => {
-    return { search: state.container }
-}
+// const mapStateToProps = (state) => {
+//     return { search: state.container }
+// }
 const mapDispatchToProps = (dispatch) => {
     return {
         actions: bindActionCreators(actions, dispatch),
     }
 }
 const Category = connect(
-    mapStateToProps, 
+    '', 
     mapDispatchToProps 
 )(CategoryComponent)
 module.exports = Category
