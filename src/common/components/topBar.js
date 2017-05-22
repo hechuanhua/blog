@@ -5,7 +5,7 @@ import {connect} from 'react-redux'
 import { bindActionCreators } from 'redux'
 import * as actions from '../actions/index'
 
-export default class TopBar extends Component{
+class TopBar extends Component{
   render(){
     if(this.props.userInfo.isLogin){
         return <div className="welcome content">{this.props.userInfo.info.name} 欢迎您的到来
@@ -22,3 +22,14 @@ export default class TopBar extends Component{
   }
 }
 
+
+const mapDispatchToProps = (dispatch) => {
+    return {
+        actions: bindActionCreators(actions, dispatch),
+    }
+}
+
+export default connect(
+    '', 
+    mapDispatchToProps
+)(TopBar)
