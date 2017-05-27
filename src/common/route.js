@@ -40,9 +40,9 @@ class App extends Component {
     constructor(props) {
         super(props)
     }
-    static ajaxData(){
-        return [actions.getUserInfo()]
-    }
+    // static ajaxData(){
+    //     //return [actions.getUserInfo()]
+    // }
     componentDidMount() {
         let WinH = document.documentElement.clientHeight
         let wrap = document.querySelector('.container')

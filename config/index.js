@@ -4,37 +4,35 @@
  * @date    2017-04-05 09:05:05
  * @version $Id$
  */
-
-/*mongoDB*/
-const mongoDbHost = 'localhost' 
-const mongoDbPort = '27017'
-const mongoDbName = 'blog'
-
-/*WEB*/
-const host = 'localhost'
-const isDev = process.env.NODE_ENV == 'production' ? false : true
-const port = isDev ? '7070' : '8080'
-
-/*API地址*/
-let requestAPI
-if(process.env.NODE_ENV == 'hechuanhua' ){
-	requestAPI = "http://"+host+"/api/"
-}else{
-	requestAPI = "http://"+host+":"+port+"/api/"
-}
-
-
-var config = {
-    mongoDbHost : mongoDbHost,
-    mongoDbPort : mongoDbPort,
-    mongoDbName : mongoDbName,
+var isDev = process.env.NODE_ENV == 'development'
+console.log(isDev,process.env.NODE_ENV)
+var devConfig = {
+    mongoDbHost : 'localhost',
+    mongoDbPort : '27017',
+    mongoDbName : 'blog',
+    host : 'localhost',
+    port : '7070',
     isDev : isDev,
-    host : host,
-    port : port,
-    requestAPI:requestAPI
+    apiPort:8888,
+    requestAPI:'http://localhost:8888/api/',//api地址
+    cookieName:'hchBlog',	//cookie名字
+    expires:'30',			//cookie失效时间（天）
+    jwtSecret:'hechuanhua'	//jwt加密钥匙
+}
+
+var proConfig = {
+    mongoDbHost : 'localhost',
+    mongoDbPort : '27017',
+    mongoDbName : 'blog',
+    host : 'localhost',
+    port : '8080',
+    isDev : !isDev,
+    apiPort:8888,
+    requestAPI:'http://localhost:8888/api/',//api地址
+    cookieName:'hchBlog',	//cookie名字
+    expires:'30',			//cookie失效时间（天）
+    jwtSecret:'hechuanhua'	//jwt加密钥匙
 }
 
 
-
-//export default host
-module.exports = config
+module.exports = isDev ? devConfig : proConfig

@@ -204,7 +204,7 @@ export const requestAPI = config.requestAPI
             })
             .then(function(data) {
                 
-                console.log(data,'data')
+                //console.log(data,'data')
                 //return resolve({data:data,type:SwitchTab(type, data)})
                 dispatch(SwitchTab(type, data))
             })
@@ -449,4 +449,33 @@ export const changeValue = (type, value, id, index, inputType) => {
         case "delItem":
         return { type: "DELITEM", choices: value, id, index }
     }
+}
+
+
+export const setCookie = (name,value) => {
+
+    var exp = new Date()
+    exp.setTime(exp.getTime() + config.expires*24*60*60*1000)
+    document.cookie = name + "="+ escape (value) + ";expires=" + exp.toGMTString()
+
+}
+
+
+export const getCookie = (name) => {
+
+    var arr,reg=new RegExp("(^| )"+name+"=([^;]*)(;|$)")
+    if(arr=document.cookie.match(reg)){
+        return unescape(arr[2]);
+    }else{
+        return null
+    }
+
+}
+
+export const delCookie = (name) => {
+    var exp = new Date();
+    exp.setTime(exp.getTime() - 1);
+    var cval=getCookie(name);
+    if(cval!=null)
+    document.cookie= name + "="+cval+";expires="+exp.toGMTString();
 }

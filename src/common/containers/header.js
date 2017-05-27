@@ -27,7 +27,7 @@ class Header extends Component {
     }
 
     render() {
-
+        
         return <div className = "Head">
                     <div className = "topTips"> 
                         <TopBar userInfo = {this.props.userInfo}/>

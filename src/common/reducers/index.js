@@ -4,8 +4,12 @@
  * @date    2016-09-05 12:55:47
  * @version $Id$
  */
+
 import {combineReducers,createStore,applyMiddleware} from "redux"
 import thunkMiddleware from 'redux-thunk'
+import * as actions from '../actions/index'
+var config = require('../../../config/index')
+var jwt = require('jwt-simple')
 
 /*切换菜单栏*/
 const switchNews = (state = [], action) => {
@@ -36,8 +40,14 @@ const mobBoxData = (state = {isShow:false,data:{}}, action) => {
 const isLogin = (state={isLogin:false},action)=>{
   switch(action.type){
     case "loginIn":
+      if(typeof window != 'undefined' ){
+        actions.setCookie(config.cookieName,jwt.encode(action.data.info,config.jwtSecret))
+      }
       return Object.assign({},state,{isLogin:true,info:action.data.info})
     case "loginOut":
+      if(typeof window != 'undefined' ){
+        actions.delCookie(config.cookieName)
+      }
       return Object.assign({},state,{isLogin:false})
     default :
       return state
