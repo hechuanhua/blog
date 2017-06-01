@@ -8,7 +8,7 @@ import * as actions from '../actions/index'
 class TopBar extends Component{
   render(){
     if(this.props.userInfo.isLogin){
-        return <div className="welcome content">{this.props.userInfo.info.name} 欢迎您的到来
+        return <div className="welcome content">{this.props.userInfo.info.userName} 欢迎您的到来
               <a href="javascript:;" onClick={(e)=>{this.props.actions.loginSubmit("loginOut")}}>退出登录</a>
             </div>
     }else{

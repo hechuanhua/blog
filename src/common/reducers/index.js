@@ -41,9 +41,9 @@ const isLogin = (state={isLogin:false},action)=>{
   switch(action.type){
     case "loginIn":
       if(typeof window != 'undefined' ){
-        actions.setCookie(config.cookieName,jwt.encode(action.data.info,config.jwtSecret))
+        actions.setCookie(config.cookieName,action.data.token)
       }
-      return Object.assign({},state,{isLogin:true,info:action.data.info})
+      return Object.assign({},state,{isLogin:true,info:action.data})
     case "loginOut":
       if(typeof window != 'undefined' ){
         actions.delCookie(config.cookieName)

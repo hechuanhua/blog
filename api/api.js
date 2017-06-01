@@ -6,9 +6,60 @@ var multer = require('multer')
 var Db = require('mongodb').Db
 var mongoDb = new Db(config.mongoDbName, new Server(config.mongoDbHost, config.mongoDbPort, { safe: true }))
 var router = express.Router()
+var jwt = require('jwt-simple')
+var ObjectId = require('mongodb').ObjectID
 
+function fsExistsSync(path) {
+    try{
+        fs.accessSync(path,fs.F_OK);
+    }catch(e){
+        return false;
+    }
+    return true;
+}
+if(!fsExistsSync('dist')){
+    fs.mkdir(path.join(__dirname, 'dist'))
+    if(!fsExistsSync('dist/images')){
+        fs.mkdir(path.join(__dirname, 'dist/images'))
+    }
+}
 
-let reqUser = null
+var storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, './dist/images')
+    },
+    filename: function(req, file, cb) {
+        console.log(file)
+        var date = new Date()
+        var Month = date.getMonth() + 1,
+            Seconds = new Date().getSeconds()
+        Month = Month < 10 ? "0" + Month : Month
+        var Hours = date.getHours() < 10 ? "0" + date.getHours() : date.getHours()
+        var Minutes = date.getMinutes() < 10 ? "0" + date.getMinutes() : date.getMinutes()
+        Seconds = Seconds < 10 ? "0" + Seconds : Seconds
+        date = date.getFullYear() + "" + Month + "" + Hours + "" + Minutes + "" + Seconds + ""
+        var type = (file.originalname).split(".");
+        cb(null, file.fieldname + date + "." + type[type.length - 1])
+    }
+})
+var uploadImg = multer({ storage: storage })
+uploadImg = uploadImg.single('upload')
+
+function verification(req, res, next){
+    var token = req.cookies[config.cookieName]||req.body.token
+}
+
+function encrypt(userId,userName){
+    return jwt.encode({
+        userId:userId,
+        userName:userName,
+        expires:new Date().getTime()+(1000*60*60*24*config.expires)
+    },config.jwtSecret)
+}
+
+function decrypt(str){
+    return jwt.decode(str,config.jwtSecret)
+}
 
 router.all('*', function(req, res, next) {
     
@@ -30,12 +81,34 @@ router.get('*', function(req, res, next) {
 
 })
 
+router.post('/api/auth',function(req,res){
+    var token = decrypt(req.body.token)
+    if( token ){
+        auth(token,function(err,user){
+            if (err) {
+                return res.json({ code: 1009, messgage: err })
+            }
+            if(user){
+                if(user.name == token.userName){
+                    var token1 = encrypt(user._id,user.name)
+                    var data = {'userName':user.name,'token':token1}
+                    res.json({ code: 1000, messgage: "认证成功，token合法", data: data })
+                }else{
+                    res.json({ code: 1001, messgage: "认证失败，非法的token", data: '' })
+                }
+            }
+        })
+    } else {
+        return false
+    }
+})
+
 router.get('/api/getUserInfo', function(req, res) {
-    //console.log(req.session.user,'req.session.user')
+    
     if (req.cookies[config.cookieName]) {
         var cookies = JSON.parse(req.cookies[config.cookieName])
-        var info = { name: cookies[config.cookieName].name }
-        return res.json({ code: 1000, messgage: "已登录", info: info })
+        var data = { name: cookies[config.cookieName].name }
+        return res.json({ code: 1000, messgage: "已登录", data: data })
     } else {
         return res.json({ code: 1001, messgage: "未登录" })
     }
@@ -52,12 +125,11 @@ router.post('/api/login', function(req, res) {
         if (user) {
 
             if (user.password == newUser.password) {
-                //req.session.user = user
-                //res.cookie('blog',JSON.stringify(user))
-                var info = user
+                var token = encrypt(user._id,user.name)
+                //res.cookie(config.cookieName,JSON.stringify(user))
+                var data = {'userName':user.name,'token':token}
 
-                //req.session.user = req.session.user
-                res.end(JSON.stringify({ code: 1000, messgage: "登录成功", info: info }))
+                res.end(JSON.stringify({ code: 1000, messgage: "登录成功", data: data }))
             } else {
                 res.end(JSON.stringify({ code: 1001, messgage: "密码错误" }))
             }
@@ -102,8 +174,9 @@ router.post('/api/publish', function(req, res) {
             if (title) {
                 return res.json({ code: 1002, messgage: "标题已存在" })
             }
+            var token = decrypt(req.cookies[config.cookieName])
             var newUpload = new Upload({
-                name: req.session.user.name,
+                name: token.userName,
                 title: req.body.title,
                 content: req.body.content,
                 upload: req.file ? "/images/" + req.file.filename : "",
@@ -216,11 +289,25 @@ router.get('/api/about', function(req, res) {
 
 function checkLogin(req, res, next) {
 
-    if (!req.session.user) {
-        return res.json({ code: 1009, messgage: "您还未登录,请先登录" })
-    }
-    next()
 
+    var token = req.cookies[config.cookieName] && decrypt(req.cookies[config.cookieName])
+    if( token ){
+        auth(token,function(err,user){
+            if (err) {
+                return res.json({ code: 1009, messgage: err })
+            }
+            if(user){
+                if(user.name == token.userName){
+                    console.log(77777)
+                    next()
+                }else{
+                    return res.json({ code: 1009, messgage: "您还未登录,请先登录" })
+                }
+            }
+        })
+    } else {
+        next()
+    }
 }
 
 function checkNotLogin(req, res, next) {
@@ -510,6 +597,19 @@ function About(content, callback) {
     })
 }
 
+function auth(token,callback){
+    mongoDb.open(function(err, db) {
+        db.collection('users', function(err, collection) {
+            collection.findOne({_id:ObjectId(token.userId)}, function(err, user) {
+                mongoDb.close()
+                if (err) {
+                    return callback(err)
+                }
+                callback(null,user)
+            })
+        })
+    })
+}
 About.getInfo = function(callback) {
     mongoDb.open(function(err, db) {
         db.collection('about', function(err, collection) {

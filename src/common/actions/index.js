@@ -2,6 +2,7 @@ var config = require('../../../config/index')
 import { browserHistory } from 'react-router'
 
 export const requestAPI = config.requestAPI
+    
 
     export const SwitchTab = (type, data) => {
 
@@ -61,7 +62,7 @@ export const requestAPI = config.requestAPI
                 /*登录成功*/
                 dispatch(mobBoxData("mobBoxClose"))
                 if (type == "loginSubmit") {
-                    return dispatch(loginTop("loginIn", data))
+                    return dispatch(login("loginIn", data.data))
                 }
                 if (type == "regSubmit") {
                     return _alertStore(dispatch, data.messgage)
@@ -81,7 +82,7 @@ export const requestAPI = config.requestAPI
             return res.json()
         }).then(function(data) {
             console.log(data)
-            dispatch(loginTop("loginOut"))
+            dispatch(login("loginOut"))
             return _alertStore(dispatch, "退出成功", function() {
                 browserHistory.push('/')
             })
@@ -268,7 +269,7 @@ export const requestAPI = config.requestAPI
     /*登录切换上面欢迎条
     @type 登录or退出登录
     */
-    export const loginTop = (type, data) => {
+    export const login = (type, data) => {
         switch (type) {
             case "loginIn":
             return {
@@ -336,12 +337,12 @@ export const requestAPI = config.requestAPI
                 })
                 .then(function(data) {
                     console.log(data);
-                    if (data.code === 1000) { //已登录
-                        return dispatch(loginTop("loginIn", data))
-                    }
-                    if (data.code === 1001) {
-                        return dispatch(loginTop("loginOut", data))
-                    }
+                    // if (data.code === 1000) { //已登录
+                    //     return dispatch(login("loginIn", data))
+                    // }
+                    // if (data.code === 1001) {
+                    //     return dispatch(login("loginOut", data))
+                    // }
                 })
                 .catch(function(e) {
                     console.error(e);

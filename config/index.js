@@ -26,7 +26,7 @@ var proConfig = {
     mongoDbName : 'blog',
     host : 'localhost',
     port : '8080',
-    isDev : !isDev,
+    isDev : isDev,
     apiPort:8888,
     requestAPI:'http://localhost:8888/api/',//api地址
     cookieName:'hchBlog',	//cookie名字

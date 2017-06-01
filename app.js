@@ -47,7 +47,7 @@ if ( config.isDev ) {
         }
     })) 
 } else {
-    var router = require('./api/index')
+    var router = require('./dist/server')
     app.set('views', path.join(__dirname, 'dist'))
     app.set('view engine', 'ejs')
 }
