@@ -63,7 +63,7 @@ function decrypt(str){
 
 router.all('*', function(req, res, next) {
     
-    res.header('Access-Control-Allow-Origin', 'http://localhost:7070')
+    res.header('Access-Control-Allow-Origin', 'http://localhost:'+config.port)
     res.header('Access-Control-Allow-Headers', 'Content-Type=application/jsoncharset=UTF-8')
     res.header('Access-Control-Allow-Credentials', true) //支持跨域传cookie
     console.log(req.session,req.cookies,req.originalUrl)
@@ -198,6 +198,9 @@ router.get('/api/newsList', function(req, res) {
     var type = category?category:''
     var params = {"type":type,"page":page}
     Upload.getList(params, function(err, list, page) {
+        if(err){
+            return console.error(err)
+        }
         var data = {}
         data["data"] = list
         data["page"] = page
@@ -467,9 +470,18 @@ function Search(keywords, callback) {
 Upload.getList = function(data, callback) {
     var num = 5
     mongoDb.open(function(err, db) {
+        if (err) {
+            return callback(err)
+        }
         db.collection('upload', function(err, collection) {
+            if (err) {
+                return callback(err)
+            }
             if(data.type){
                 collection.count({'category':data.type}, function(err, count) {
+                    if (err) {
+                        return callback(err)
+                    }
                     collection.find({'category':data.type}, {
                         limit: num,
                         skip: (data.page - 1) * num
@@ -485,6 +497,9 @@ Upload.getList = function(data, callback) {
                 })
             }else{
                 collection.count({}, function(err, count) {
+                    if (err) {
+                        return callback(err)
+                    }
                     collection.find({}, {
                         limit: num,
                         skip: (data.page - 1) * num
