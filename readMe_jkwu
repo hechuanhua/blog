@@ -1,0 +1,43 @@
+
+基于react + react-router + redux + nodeJS + express + mongoDB + ES6 + webpack 的个人博客
+作品
+hechuanhua
+16年10月
+4
+
+blog在线预览地址：www.hechuanhua.cn308
+源码地址：https://github.com/hechuanhua/blog413
+前端: react + redux + react-router + es6 + webpack
+后端: node + express + mongoDB
+前后端完全分离
+前言
+
+其实我是看到这个网站 http://guahao.jkqd.gov.cn104 感觉很好
+所以自己尝试着写了一个，都是一些基础功能，希望大家能一起多交流
+功能
+
+登陆
+注册
+发布文章
+上传图片
+留言
+搜索
+DIY表单
+
+开始
+
+1.安装 nodejs(>=4)
+2.启动mongodb
+运行
+
+开发环境===>
+npm run node
+npm run dev
+(上面2个命令开2个窗口同时运行)
+浏览器输入 localhost:7070
+
+生产环境===>
+npm run node
+npm run dist
+浏览器输入 localhost:8080
+
